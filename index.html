@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <title>智慧垃圾分類</title>
+</head>
+<body>
+  <h2>開啟手機鏡頭拍照</h2>
+  
+  <!-- 顯示鏡頭畫面 -->
+  <video id="video" width="320" height="240" autoplay playsinline muted></video>
+  <br>
+  <button id="snap">拍照</button>
+  
+  <!-- 顯示拍下來的照片 -->
+  <canvas id="canvas" width="320" height="240"></canvas>
+
+  <script>
+    const video = document.getElementById('video');
+
+    // 取得攝影機權限並串流到 video
+    navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } })
+      .then(stream => {
+        video.srcObject = stream;
+      })
+      .catch(err => {
+        console.error("無法開啟鏡頭: ", err);
+      });
+
+    // 拍照功能
+    const canvas = document.getElementById('canvas');
+    const context = canvas.getContext('2d');
+    document.getElementById("snap").addEventListener("click", () => {
+      context.drawImage(video, 0, 0, 320, 240);
+    });
+  </script>
+</body>
+</html>
