@@ -51,11 +51,23 @@
       margin-top: 20px;
       font-size: 1.3rem;
       font-weight: bold;
-      color: #1b5e20;
-      background: #c8e6c9;
       padding: 12px 20px;
       border-radius: 12px;
       display: none;
+    }
+
+    /* 類別顏色 */
+    .recycle {
+      background: #c8e6c9;
+      color: #1b5e20;
+    }
+    .trash {
+      background: #eeeeee;
+      color: #424242;
+    }
+    .hazard {
+      background: #ffcdd2;
+      color: #b71c1c;
     }
   </style>
 </head>
@@ -120,9 +132,24 @@
         if (p.probability > best.probability) best = p;
       });
 
+      // 顏色分類
+      let cssClass = "";
+      let icon = "🗑️";
+      if (best.className.includes("可回收")) {
+        cssClass = "recycle";
+        icon = "♻️";
+      } else if (best.className.includes("有害")) {
+        cssClass = "hazard";
+        icon = "☠️";
+      } else {
+        cssClass = "trash";
+        icon = "🗑️";
+      }
+
       // 顯示結果
+      resultBox.className = cssClass;
       resultBox.style.display = "block";
-      resultBox.innerText = `分類結果：${best.className} (${(best.probability*100).toFixed(2)}%)`;
+      resultBox.innerText = `${icon} 分類結果：${best.className} (${(best.probability*100).toFixed(2)}%)`;
     });
   </script>
 </body>
