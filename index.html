@@ -3,9 +3,60 @@
 <head>
   <meta charset="UTF-8">
   <title>智慧垃圾分類</title>
+  <style>
+    body {
+      font-family: "Noto Sans TC", sans-serif;
+      background: linear-gradient(135deg, #e0f7fa, #e8f5e9);
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      min-height: 100vh;
+      color: #333;
+    }
+
+    h2 {
+      margin-top: 20px;
+      color: #2e7d32;
+      font-size: 1.8rem;
+      letter-spacing: 1px;
+    }
+
+    video, canvas {
+      border: 3px solid #a5d6a7;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      margin: 15px 0;
+    }
+
+    button {
+      background: #66bb6a;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      font-size: 1rem;
+      font-weight: bold;
+      border-radius: 25px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    button:hover {
+      background: #43a047;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+    }
+
+    #canvas {
+      display: block;
+      margin-bottom: 20px;
+    }
+  </style>
 </head>
 <body>
-  <h2>開啟手機鏡頭拍照</h2>
+  <h2>📷 開啟手機鏡頭拍照</h2>
   
   <!-- 顯示鏡頭畫面 -->
   <video id="video" width="360" height="480" autoplay playsinline muted></video>
@@ -36,6 +87,3 @@
   </script>
 </body>
 </html>
-
-
-
