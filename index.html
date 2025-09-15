@@ -8,12 +8,12 @@
   <h2>開啟手機鏡頭拍照</h2>
   
   <!-- 顯示鏡頭畫面 -->
-  <video id="video" width="320" height="240" autoplay playsinline muted></video>
+  <video id="video" width="480" height="480" autoplay playsinline muted></video>
   <br>
   <button id="snap">拍照</button>
   
   <!-- 顯示拍下來的照片 -->
-  <canvas id="canvas" width="320" height="240"></canvas>
+  <canvas id="canvas" width="480" height="480"></canvas>
 
   <script>
     const video = document.getElementById('video');
@@ -31,8 +31,9 @@
     const canvas = document.getElementById('canvas');
     const context = canvas.getContext('2d');
     document.getElementById("snap").addEventListener("click", () => {
-      context.drawImage(video, 0, 0, 320, 240);
+      context.drawImage(video, 0, 0, 480, 480);
     });
   </script>
 </body>
 </html>
+
