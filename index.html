@@ -49,11 +49,11 @@
 
     #result {
       margin-top: 20px;
-      font-size: 1.2rem;
+      font-size: 1.3rem;
       font-weight: bold;
       color: #1b5e20;
       background: #c8e6c9;
-      padding: 10px 20px;
+      padding: 12px 20px;
       border-radius: 12px;
       display: none;
     }
@@ -73,7 +73,7 @@
   <!-- 顯示分類結果 -->
   <div id="result"></div>
 
-  <!-- Teachable Machine 需要的 js -->
+  <!-- TF.js + Teachable Machine -->
   <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@latest/dist/teachablemachine-image.min.js"></script>
 
@@ -83,217 +83,25 @@
     const context = canvas.getContext('2d');
     const resultBox = document.getElementById('result');
 
-    // 1️⃣ 啟動相機
+    // 啟動相機
     navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } })
-      .then(stream => {
-        video.srcObject = stream;
-      })
-      .catch(err => {
-        console.error("無法開啟鏡頭: ", err);
-      });
+      .then(stream => video.srcObject = stream)
+      .catch(err => console.error("無法開啟鏡頭: ", err));
 
-    // 2️⃣ 載入 Teachable Machine 模型
-    const MODEL_URL = "<!DOCTYPE html>
-<html lang="zh-TW">
-<head>
-  <meta charset="UTF-8">
-  <title>智慧垃圾分類</title>
-  <style>
-    body {
-      font-family: "Noto Sans TC", sans-serif;
-      background: linear-gradient(135deg, #e0f7fa, #e8f5e9);
-      margin: 0;
-      padding: 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      min-height: 100vh;
-      color: #333;
-    }
-
-    h2 {
-      margin-top: 20px;
-      color: #2e7d32;
-      font-size: 1.8rem;
-    }
-
-    video, canvas {
-      border: 3px solid #a5d6a7;
-      border-radius: 12px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-      margin: 15px 0;
-    }
-
-    button {
-      background: #66bb6a;
-      color: white;
-      border: none;
-      padding: 12px 24px;
-      font-size: 1rem;
-      font-weight: bold;
-      border-radius: 25px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-
-    button:hover {
-      background: #43a047;
-      transform: translateY(-2px);
-      box-shadow: 0 6px 12px rgba(0,0,0,0.2);
-    }
-
-    #result {
-      margin-top: 20px;
-      font-size: 1.2rem;
-      font-weight: bold;
-      color: #1b5e20;
-      background: #c8e6c9;
-      padding: 10px 20px;
-      border-radius: 12px;
-      display: none;
-    }
-  </style>
-</head>
-<body>
-  <h2>📷 智慧垃圾分類</h2>
-  
-  <!-- 顯示鏡頭畫面 -->
-  <video id="video" width="360" height="480" autoplay playsinline muted></video>
-  <br>
-  <button id="snap">拍照並分類</button>
-  
-  <!-- 顯示拍下來的照片 -->
-  <canvas id="canvas" width="360" height="480"></canvas>
-
-  <!-- 顯示分類結果 -->
-  <div id="result"></div>
-
-  <!-- Teachable Machine 需要的 js -->
-  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@latest/dist/teachablemachine-image.min.js"></script>
-
-  <script>
-    const video = document.getElementById('video');
-    const canvas = document.getElementById('canvas');
-    const context = canvas.getContext('2d');
-    const resultBox = document.getElementById('result');
-
-    // 1️⃣ 啟動相機
-    navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } })
-      .then(stream => {
-        video.srcObject = stream;
-      })
-      .catch(err => {
-        console.error("無法開啟鏡頭: ", err);
-      });
-
-    // 2️⃣ 載入 Teachable Machine 模型
-    const MODEL_URL = "<!DOCTYPE html>
-<html lang="zh-TW">
-<head>
-  <meta charset="UTF-8">
-  <title>智慧垃圾分類</title>
-  <style>
-    body {
-      font-family: "Noto Sans TC", sans-serif;
-      background: linear-gradient(135deg, #e0f7fa, #e8f5e9);
-      margin: 0;
-      padding: 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      min-height: 100vh;
-      color: #333;
-    }
-
-    h2 {
-      margin-top: 20px;
-      color: #2e7d32;
-      font-size: 1.8rem;
-    }
-
-    video, canvas {
-      border: 3px solid #a5d6a7;
-      border-radius: 12px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-      margin: 15px 0;
-    }
-
-    button {
-      background: #66bb6a;
-      color: white;
-      border: none;
-      padding: 12px 24px;
-      font-size: 1rem;
-      font-weight: bold;
-      border-radius: 25px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-
-    button:hover {
-      background: #43a047;
-      transform: translateY(-2px);
-      box-shadow: 0 6px 12px rgba(0,0,0,0.2);
-    }
-
-    #result {
-      margin-top: 20px;
-      font-size: 1.2rem;
-      font-weight: bold;
-      color: #1b5e20;
-      background: #c8e6c9;
-      padding: 10px 20px;
-      border-radius: 12px;
-      display: none;
-    }
-  </style>
-</head>
-<body>
-  <h2>📷 智慧垃圾分類</h2>
-  
-  <!-- 顯示鏡頭畫面 -->
-  <video id="video" width="360" height="480" autoplay playsinline muted></video>
-  <br>
-  <button id="snap">拍照並分類</button>
-  
-  <!-- 顯示拍下來的照片 -->
-  <canvas id="canvas" width="360" height="480"></canvas>
-
-  <!-- 顯示分類結果 -->
-  <div id="result"></div>
-
-  <!-- Teachable Machine 需要的 js -->
-  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@latest/dist/teachablemachine-image.min.js"></script>
-
-  <script>
-    const video = document.getElementById('video');
-    const canvas = document.getElementById('canvas');
-    const context = canvas.getContext('2d');
-    const resultBox = document.getElementById('result');
-
-    // 1️⃣ 啟動相機
-    navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } })
-      .then(stream => {
-        video.srcObject = stream;
-      })
-      .catch(err => {
-        console.error("無法開啟鏡頭: ", err);
-      });
-
-    // 2️⃣ 載入 Teachable Machine 模型
-    const MODEL_URL = "https://teachablemachine.withgoogle.com/models/"; // ← 這裡換成 Teachable Machine 提供的 model.json 連結
-    let model;
+    // 模型路徑 (改成你的模型資料夾)
+    const URL = "./my_model/";
+    let model, maxPredictions;
 
     async function loadModel() {
-      model = await tmImage.load(MODEL_URL.replace("model.json", "metadata.json").replace("metadata.json","model.json"), 
-                                 MODEL_URL.replace("model.json", "metadata.json"));
-      console.log("模型載入完成");
+      const modelURL = URL + "model.json";
+      const metadataURL = URL + "metadata.json";
+      model = await tmImage.load(modelURL, metadataURL);
+      maxPredictions = model.getTotalClasses();
+      console.log("✅ 模型載入完成");
     }
     loadModel();
 
-    // 3️⃣ 拍照 & 分類
+    // 拍照 + 分類
     document.getElementById("snap").addEventListener("click", async () => {
       // 拍照
       context.drawImage(video, 0, 0, canvas.width, canvas.height);
@@ -306,79 +114,7 @@
       // 預測
       const prediction = await model.predict(canvas);
 
-      // 找出最高機率的分類
-      let best = prediction[0];
-      prediction.forEach(p => {
-        if (p.probability > best.probability) best = p;
-      });
-
-      // 顯示結果
-      resultBox.style.display = "block";
-      resultBox.innerText = `分類結果：${best.className} (${(best.probability*100).toFixed(2)}%)`;
-    });
-  </script>
-</body>
-</html>
-/model.json"; // ← 這裡換成 Teachable Machine 提供的 model.json 連結
-    let model;
-
-    async function loadModel() {
-      model = await tmImage.load(MODEL_URL.replace("model.json", "metadata.json").replace("metadata.json","model.json"), 
-                                 MODEL_URL.replace("model.json", "metadata.json"));
-      console.log("模型載入完成");
-    }
-    loadModel();
-
-    // 3️⃣ 拍照 & 分類
-    document.getElementById("snap").addEventListener("click", async () => {
-      // 拍照
-      context.drawImage(video, 0, 0, canvas.width, canvas.height);
-
-      if (!model) {
-        alert("模型尚未載入完成，請稍後再試！");
-        return;
-      }
-
-      // 預測
-      const prediction = await model.predict(canvas);
-
-      // 找出最高機率的分類
-      let best = prediction[0];
-      prediction.forEach(p => {
-        if (p.probability > best.probability) best = p;
-      });
-
-      // 顯示結果
-      resultBox.style.display = "block";
-      resultBox.innerText = `分類結果：${best.className} (${(best.probability*100).toFixed(2)}%)`;
-    });
-  </script>
-</body>
-</html>
-https://teachablemachine.withgoogle.com/models"; // ← 這裡換成 Teachable Machine 提供的 model.json 連結
-    let model;
-
-    async function loadModel() {
-      model = await tmImage.load(MODEL_URL.replace("model.json", "metadata.json").replace("metadata.json","model.json"), 
-                                 MODEL_URL.replace("model.json", "metadata.json"));
-      console.log("模型載入完成");
-    }
-    loadModel();
-
-    // 3️⃣ 拍照 & 分類
-    document.getElementById("snap").addEventListener("click", async () => {
-      // 拍照
-      context.drawImage(video, 0, 0, canvas.width, canvas.height);
-
-      if (!model) {
-        alert("模型尚未載入完成，請稍後再試！");
-        return;
-      }
-
-      // 預測
-      const prediction = await model.predict(canvas);
-
-      // 找出最高機率的分類
+      // 找出最高機率
       let best = prediction[0];
       prediction.forEach(p => {
         if (p.probability > best.probability) best = p;
