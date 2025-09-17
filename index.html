@@ -87,7 +87,7 @@
     // 載入模型
     async function loadModel() {
       try {
-        model = await tmImage.load('./model/model.json', './model/metadata.json');
+        model = await tmImage.load('./model/model.json', './model/metadata.json', './model/weights.bin');
         maxPredictions = model.getTotalClasses();
         snapBtn.disabled = false;
         alert("✅ 模型載入完成，可以開始拍照分類！");
@@ -124,3 +124,4 @@
   </script>
 </body>
 </html>
+
