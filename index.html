@@ -93,7 +93,7 @@
         resultBox.innerText = "⏳ 模型載入中...";
 
         // ✅ 只需要 model.json 路徑
-        model = await tmImage.load('model/model.json');
+        model = await tmImage.load('./model/model.json');
         maxPredictions = model.getTotalClasses();
         snapBtn.disabled = false;
 
