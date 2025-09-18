@@ -113,8 +113,10 @@
         resultBox.className = "trash";
         resultBox.innerText = "⏳ 模型載入中...";
 
-        // ✅ 只需要 model.json
-        model = await tmImage.load("./model/model.json");
+        // ✅ 同時載入 model.json + metadata.json
+        const modelURL = "./model/model.json";
+        const metadataURL = "./model/metadata.json";
+        model = await tmImage.load(modelURL, metadataURL);
 
         snapBtn.disabled = false;
         resultBox.className = "recycle";
