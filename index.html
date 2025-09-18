@@ -2,7 +2,7 @@
 <html lang="zh-TW">
 <head>
   <meta charset="UTF-8">
-  <title>智慧垃圾分類 - Teachable Machine</title>
+  <title>智慧垃圾分類</title>
   <style>
     body {
       font-family: "Noto Sans TC", sans-serif;
@@ -12,31 +12,48 @@
       display: flex;
       flex-direction: column;
       align-items: center;
+      justify-content: flex-start;
       min-height: 100vh;
       color: #333;
     }
+
     h2 {
       margin-top: 20px;
       color: #2e7d32;
       font-size: 1.8rem;
+      letter-spacing: 1px;
     }
+
     video, canvas {
       border: 3px solid #a5d6a7;
       border-radius: 12px;
       box-shadow: 0 4px 10px rgba(0,0,0,0.1);
       margin: 15px 0;
     }
+
     button {
       background: #66bb6a;
       color: white;
       border: none;
-      padding: 10px 20px;
+      padding: 12px 24px;
       font-size: 1rem;
-      border-radius: 20px;
+      font-weight: bold;
+      border-radius: 25px;
       cursor: pointer;
-      margin: 10px;
+      transition: all 0.3s ease;
     }
-    button:hover { background: #43a047; }
+
+    button:hover {
+      background: #43a047;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+    }
+
+    #canvas {
+      display: block;
+      margin-bottom: 20px;
+    }
+
     #result {
       margin-top: 20px;
       font-size: 1.2rem;
@@ -53,13 +70,17 @@
   </style>
 </head>
 <body>
-  <h2>📷 拍照分類垃圾</h2>
-
+  <h2>📷 開啟手機鏡頭拍照並分類</h2>
+  
+  <!-- 顯示鏡頭畫面 -->
   <video id="video" width="360" height="480" autoplay playsinline muted></video>
   <br>
   <button id="snap" disabled>拍照並分類</button>
+  
+  <!-- 顯示拍下來的照片 -->
+  <canvas id="canvas" width="360" height="480"></canvas>
 
-  <canvas id="canvas" width="360" height="480" style="display:none;"></canvas>
+  <!-- 顯示分類結果 -->
   <div id="result"></div>
 
   <!-- 載入套件 -->
@@ -73,7 +94,7 @@
     const resultBox = document.getElementById('result');
     const snapBtn = document.getElementById("snap");
 
-    let model, maxPredictions;
+    let model;
 
     // 啟動相機
     navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } })
@@ -92,18 +113,17 @@
         resultBox.className = "trash";
         resultBox.innerText = "⏳ 模型載入中...";
 
-        // ✅ 只需要 model.json 路徑
-        model = await tmImage.load('./model/model.json');
-        maxPredictions = model.getTotalClasses();
-        snapBtn.disabled = false;
+        // ✅ 只需要 model.json
+        model = await tmImage.load("./model/model.json");
 
+        snapBtn.disabled = false;
         resultBox.className = "recycle";
         resultBox.innerText = "✅ 模型載入完成，可以開始拍照分類！";
       } catch (err) {
         console.error("模型載入失敗：", err);
         resultBox.style.display = "block";
         resultBox.className = "hazard";
-        resultBox.innerText = "❌ 模型載入失敗！請確認：\n1. HTML 與 model 資料夾同目錄\n2. model 裡有 model.json、metadata.json、weights.bin\n3. 用 Live Server 或本地伺服器開啟";
+        resultBox.innerText = "❌ 模型載入失敗！請確認：model 資料夾位置與檔案是否正確";
       }
     }
 
@@ -111,7 +131,6 @@
 
     // 拍照 + 分類
     snapBtn.addEventListener("click", async () => {
-      canvas.style.display = "block";
       context.drawImage(video, 0, 0, canvas.width, canvas.height);
 
       if (!model) {
@@ -122,19 +141,24 @@
       }
 
       try {
-        const prediction = await model.predict(canvas, false);
+        const prediction = await model.predict(canvas);
 
+        // 找最高機率
         let best = prediction[0];
-        prediction.forEach(p => { if (p.probability > best.probability) best = p; });
+        prediction.forEach(p => {
+          if (p.probability > best.probability) best = p;
+        });
 
+        // 判斷分類
         let cssClass = "trash", icon = "🗑️";
         if (best.className.includes("可回收")) { cssClass = "recycle"; icon = "♻️"; }
         else if (best.className.includes("有害")) { cssClass = "hazard"; icon = "☠️"; }
 
+        // 顯示結果
         resultBox.className = cssClass;
         resultBox.style.display = "block";
         resultBox.innerText = `${icon} 分類結果：${best.className} (${(best.probability*100).toFixed(2)}%)`;
-      } catch(err) {
+      } catch (err) {
         console.error("分類失敗：", err);
         resultBox.style.display = "block";
         resultBox.className = "hazard";
@@ -144,4 +168,3 @@
   </script>
 </body>
 </html>
-
