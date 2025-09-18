@@ -61,9 +61,9 @@
   <button id="snap" disabled>拍照並分類</button>
 
   <!-- 顯示拍下來的照片 -->
-  <canvas id="canvas" width="360" height="480" style="display:none;"></canvas>
+  <canvas id="canvas" width="360" height="480"></canvas>
 
-  <!-- 顯示分類結果 / 狀態 -->
+  <!-- 顯示分類結果 -->
   <div id="result"></div>
 
   <!-- 載入套件 -->
@@ -87,22 +87,13 @@
     // 載入模型
     async function loadModel() {
       try {
-        resultBox.style.display = "block";
-        resultBox.className = "trash";
-        resultBox.innerText = "⏳ 模型載入中...";
-
-        // 注意：拿掉了 "./"
-        model = await tmImage.load('model/model.json', 'model/metadata.json', 'model/weights.bin');
+        model = await tmImage.load('./model/model.json', './model/metadata.json');
         maxPredictions = model.getTotalClasses();
         snapBtn.disabled = false;
-
-        resultBox.className = "recycle";
-        resultBox.innerText = "✅ 模型載入完成，可以開始拍照分類！";
+        alert("✅ 模型載入完成，可以開始拍照分類！");
       } catch (err) {
         console.error("❌ 模型載入失敗：", err);
-        resultBox.style.display = "block";
-        resultBox.className = "hazard";
-        resultBox.innerText = "❌ 模型載入失敗，請確認 /model/ 資料夾與檔名正確";
+        alert("載入失敗，請確認模型已正確放在 /model/ 資料夾");
       }
     }
 
@@ -110,12 +101,9 @@
 
     // 拍照 + 分類
     snapBtn.addEventListener("click", async () => {
-      canvas.style.display = "block";
       context.drawImage(video, 0, 0, canvas.width, canvas.height);
       if (!model) {
-        resultBox.style.display = "block";
-        resultBox.className = "hazard";
-        resultBox.innerText = "⚠️ 模型尚未載入完成";
+        alert("模型尚未載入完成");
         return;
       }
 
@@ -136,4 +124,5 @@
   </script>
 </body>
 </html>
+
 
