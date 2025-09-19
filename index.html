@@ -83,10 +83,11 @@
   <!-- 顯示分類結果 -->
   <div id="result"></div>
 
-  <!-- 載入套件 -->
+  <!-- 載入套件（⚠️ 注意順序：tfjs -> teachablemachine -> 你的程式碼） -->
   <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest"></script>
   <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@latest"></script>
 
+  <!-- 你的程式碼 -->
   <script>
     const video = document.getElementById('video');
     const canvas = document.getElementById('canvas');
@@ -113,10 +114,10 @@
         resultBox.className = "trash";
         resultBox.innerText = "⏳ 模型載入中...";
 
-        // ✅ 同時載入 model.json + metadata.json
+        // ✅ 正確載入 model.json + metadata.json
         const modelURL = "./model/model.json";
         const metadataURL = "./model/metadata.json";
-        model = await tmImage.load(modelURL, metadataURL);
+        model = await window.tmImage.load(modelURL, metadataURL);
 
         snapBtn.disabled = false;
         resultBox.className = "recycle";
@@ -152,21 +153,4 @@
         });
 
         // 判斷分類
-        let cssClass = "trash", icon = "🗑️";
-        if (best.className.includes("可回收")) { cssClass = "recycle"; icon = "♻️"; }
-        else if (best.className.includes("有害")) { cssClass = "hazard"; icon = "☠️"; }
-
-        // 顯示結果
-        resultBox.className = cssClass;
-        resultBox.style.display = "block";
-        resultBox.innerText = `${icon} 分類結果：${best.className} (${(best.probability*100).toFixed(2)}%)`;
-      } catch (err) {
-        console.error("分類失敗：", err);
-        resultBox.style.display = "block";
-        resultBox.className = "hazard";
-        resultBox.innerText = "⚠️ 分類過程發生錯誤：" + err.message;
-      }
-    });
-  </script>
-</body>
-</html>
+        l
