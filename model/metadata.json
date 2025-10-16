@@ -1,1 +1,1 @@
-{"tfjsVersion":"1.7.4","tmVersion":"2.4.10","packageVersion":"0.8.4-alpha2","packageName":"@teachablemachine/image","timeStamp":"2025-09-19T03:59:53.358Z","userMetadata":{},"modelName":"tm-my-image-model","labels":["Class 1","Class 2"],"imageSize":224}
+{"tfjsVersion":"1.7.4","tmVersion":"2.4.10","packageVersion":"0.8.4-alpha2","packageName":"@teachablemachine/image","timeStamp":"2025-10-16T05:40:03.320Z","userMetadata":{},"modelName":"tm-my-image-model","labels":["一般垃圾","資源回收-塑膠類"],"imageSize":224}
