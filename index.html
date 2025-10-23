@@ -1,121 +1,147 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
   <title>智慧垃圾分類系統</title>
   <style>
+    * {
+      box-sizing: border-box;
+      transition: all 0.6s ease;
+    }
     body {
       font-family: "Noto Sans TC", sans-serif;
-      background: linear-gradient(135deg, #e8f5e9, #e3f2fd);
+      background: linear-gradient(135deg, #e0f7fa, #e8f5e9);
       margin: 0;
       padding: 0;
       display: flex;
-      flex-direction: column;
+      justify-content: center;
       align-items: center;
-      min-height: 100vh;
-      color: #2e7d32;
+      height: 100vh;
+      overflow: hidden;
     }
-    header {
-      background: #81c784;
-      color: white;
-      width: 100%;
-      text-align: center;
-      padding: 16px 0;
-      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
-    }
-    h1 {
-      margin: 0;
-      font-size: 1.8rem;
-      letter-spacing: 1px;
-    }
-    main {
+    /* 封面頁 */
+    #cover {
+      position: absolute;
+      inset: 0;
       display: flex;
       flex-direction: column;
+      justify-content: center;
       align-items: center;
-      margin-top: 25px;
+      background: radial-gradient(circle at center, #c8facc 0%, #a5d6a7 50%, #66bb6a 100%);
+      z-index: 2;
+      animation: fadeIn 1.5s ease forwards;
+    }
+    #cover img {
+      width: 220px;
+      margin-bottom: 25px;
+      filter: drop-shadow(0 0 15px rgba(76, 175, 80, 0.8));
+      animation: float 3s ease-in-out infinite;
+    }
+    #cover button {
+      background: #2e7d32;
+      color: white;
+      border: none;
+      padding: 14px 36px;
+      font-size: 1.2rem;
+      font-weight: bold;
+      border-radius: 30px;
+      cursor: pointer;
+      box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+      transition: all 0.3s ease;
+    }
+    #cover button:hover {
+      background: #43a047;
+      transform: scale(1.05);
+    }
+
+    /* 主系統畫面 */
+    #main {
+      opacity: 0;
+      transform: translateY(50px);
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      width: 100%;
+      animation: slideUp 1s ease forwards;
+    }
+    h2 {
+      margin-top: 20px;
+      color: #2e7d32;
+      font-size: 1.8rem;
     }
     video, canvas {
       border: 3px solid #a5d6a7;
-      border-radius: 16px;
+      border-radius: 12px;
       margin: 15px 0;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
     }
     button {
       background: #66bb6a;
       color: white;
       border: none;
-      padding: 12px 28px;
+      padding: 12px 24px;
       font-size: 1rem;
       font-weight: bold;
-      border-radius: 30px;
+      border-radius: 25px;
       cursor: pointer;
       transition: all 0.3s ease;
-      margin-top: 8px;
     }
     button:hover {
       background: #43a047;
       transform: translateY(-2px);
-      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25);
+      box-shadow: 0 6px 12px rgba(0,0,0,0.2);
     }
     #result {
       margin-top: 20px;
       font-size: 1.2rem;
       font-weight: bold;
-      padding: 14px 20px;
-      border-radius: 14px;
+      padding: 12px 20px;
+      border-radius: 12px;
       display: none;
       min-width: 320px;
       text-align: center;
-      transition: all 0.4s ease;
     }
     .recycle { background: #c8e6c9; color: #1b5e20; }
-    .trash   { background: #f5f5f5; color: #424242; }
+    .trash   { background: #eeeeee; color: #424242; }
     .hazard  { background: #ffcdd2; color: #b71c1c; }
 
-    .loader {
-      margin-top: 25px;
-      border: 5px solid #f0f0f0;
-      border-top: 5px solid #66bb6a;
-      border-radius: 50%;
-      width: 45px;
-      height: 45px;
-      animation: spin 1s linear infinite;
-      display: none;
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
     }
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
+    @keyframes fadeOut {
+      from { opacity: 1; }
+      to { opacity: 0; transform: scale(1.05); }
     }
-    footer {
-      margin-top: auto;
-      padding: 15px;
-      text-align: center;
-      font-size: 0.9rem;
-      color: #777;
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(50px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
     }
   </style>
 </head>
 <body>
-  <header>
-    <h1>🌍 智慧垃圾分類系統</h1>
-    <h2>AI 辨識一般垃圾、資源回收與有害垃圾</h2>
-  </header>
 
-  <main>
+  <!-- 封面區 -->
+  <div id="cover">
+    <img src="./專題LOGO.png" alt="專題LOGO">
+    <button onclick="enterSystem()">進入系統</button>
+  </div>
+
+  <!-- 主系統頁 -->
+  <div id="main">
+    <h2>📷 開啟鏡頭拍照並分類</h2>
     <video id="video" width="360" height="480" autoplay playsinline muted></video>
-    <canvas id="canvas" width="360" height="480" style="display:none;"></canvas>
-
-    <div class="loader" id="loader"></div>
+    <br>
+    <button id="snap" disabled>拍照並分類</button>
+    <canvas id="canvas" width="360" height="480"></canvas>
     <div id="result"></div>
+  </div>
 
-    <button id="snap" disabled>📸 拍照並分類</button>
-  </main>
-
-  <footer>
-    智慧分類系統 © 2025 | Powered by Teachable Machine + TensorFlow.js
-  </footer>
-
-  <!-- ⚙️ 套件 -->
+  <!-- 模型與主程式 -->
   <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest"></script>
   <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image/dist/teachablemachine-image.min.js"></script>
 
@@ -125,49 +151,54 @@
     const context = canvas.getContext('2d');
     const resultBox = document.getElementById('result');
     const snapBtn = document.getElementById("snap");
-    const loader = document.getElementById("loader");
-
     let model;
 
-    // 啟動相機
-    navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } })
-      .then(stream => video.srcObject = stream)
-      .catch(err => {
-        console.error("無法開啟鏡頭:", err);
-        resultBox.style.display = "block";
-        resultBox.className = "hazard";
-        resultBox.innerText = "⚠️ 無法開啟鏡頭：" + err.message;
-      });
+    // 封面動畫切換
+    function enterSystem() {
+      const cover = document.getElementById('cover');
+      const main = document.getElementById('main');
+      cover.style.animation = "fadeOut 1s ease forwards";
+      setTimeout(() => {
+        cover.style.display = "none";
+        main.style.display = "flex";
+        main.style.opacity = "1";
+        loadCameraAndModel();
+      }, 1000);
+    }
 
-    // 載入模型
-    async function loadModel() {
+    // 開啟鏡頭與載入模型
+    async function loadCameraAndModel() {
       try {
-        loader.style.display = "block";
+        navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } })
+          .then(stream => video.srcObject = stream)
+          .catch(err => {
+            console.error("無法開啟鏡頭: ", err);
+            resultBox.style.display = "block";
+            resultBox.className = "hazard";
+            resultBox.innerText = "⚠️ 無法開啟鏡頭：" + err.message;
+          });
+
         resultBox.style.display = "block";
         resultBox.className = "trash";
-        resultBox.innerText = "⏳ 模型載入中，請稍候...";
+        resultBox.innerText = "⏳ 模型載入中...";
 
         const modelURL = "./model/model.json";
         const metadataURL = "./model/metadata.json";
         model = await window.tmImage.load(modelURL, metadataURL);
 
         snapBtn.disabled = false;
-        loader.style.display = "none";
         resultBox.className = "recycle";
         resultBox.innerText = "✅ 模型載入完成，可以開始拍照分類！";
       } catch (err) {
-        loader.style.display = "none";
         console.error("模型載入失敗：", err);
+        resultBox.style.display = "block";
         resultBox.className = "hazard";
-        resultBox.innerText = "❌ 模型載入失敗，請確認 model 資料夾是否存在。";
+        resultBox.innerText = "❌ 模型載入失敗！請確認 model 資料夾是否正確。";
       }
     }
 
-    loadModel();
-
     // 拍照 + 分類
     snapBtn.addEventListener("click", async () => {
-      canvas.style.display = "block";
       context.drawImage(video, 0, 0, canvas.width, canvas.height);
 
       if (!model) {
@@ -177,27 +208,22 @@
         return;
       }
 
-      loader.style.display = "block";
-      resultBox.style.display = "none";
-
       try {
         const prediction = await model.predict(canvas);
-        loader.style.display = "none";
-        resultBox.style.display = "block";
-
-        // 找出機率最高的分類
-        let best = prediction.reduce((prev, curr) => 
-          prev.probability > curr.probability ? prev : curr
-        );
+        let best = prediction[0];
+        prediction.forEach(p => {
+          if (p.probability > best.probability) best = p;
+        });
 
         let cssClass = "trash", icon = "🗑️";
         if (best.className.includes("可回收")) { cssClass = "recycle"; icon = "♻️"; }
         else if (best.className.includes("有害")) { cssClass = "hazard"; icon = "☠️"; }
 
         resultBox.className = cssClass;
-        resultBox.innerText = `${icon} 分類結果：${best.className} (${(best.probability * 100).toFixed(2)}%)`;
+        resultBox.style.display = "block";
+        resultBox.innerText = `${icon} 分類結果：${best.className} (${(best.probability*100).toFixed(2)}%)`;
       } catch (err) {
-        loader.style.display = "none";
+        console.error("分類失敗：", err);
         resultBox.style.display = "block";
         resultBox.className = "hazard";
         resultBox.innerText = "⚠️ 分類過程發生錯誤：" + err.message;
@@ -206,6 +232,3 @@
   </script>
 </body>
 </html>
-
-
-
