@@ -150,9 +150,11 @@
     const cover = document.getElementById('cover');
     const main = document.getElementById('main');
     let model;
+    let currentStream = null;
 
     // 封面 → 主畫面
-    function enterSystem() {
+    async function enterSystem() {
+      stopCamera(); // 每次重新嘗試前先停掉相機
       cover.style.animation = "fadeOut 1s ease forwards";
       setTimeout(() => {
         cover.style.display = "none";
@@ -162,22 +164,32 @@
       }, 1000);
     }
 
-    // 返回封面（相機被拒絕）
+    // 回到封面
     function backToCover(message) {
+      stopCamera();
       main.style.display = "none";
       cover.style.display = "flex";
       cover.style.animation = "fadeIn 1s ease forwards";
       alert(message + "\n請允許使用相機再試一次。");
     }
 
+    // 關閉攝影機串流
+    function stopCamera() {
+      if (currentStream) {
+        currentStream.getTracks().forEach(track => track.stop());
+        currentStream = null;
+      }
+      video.srcObject = null;
+    }
+
     // 開啟鏡頭與載入模型
     async function loadCameraAndModel() {
       try {
-        const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
-        video.srcObject = stream;
+        currentStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
+        video.srcObject = currentStream;
       } catch (err) {
         console.error("鏡頭存取失敗：", err);
-        backToCover("⚠️ 無法開啟鏡頭" );
+        backToCover("⚠️ 無法開啟鏡頭：" + err.message);
         return;
       }
 
