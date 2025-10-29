@@ -62,7 +62,7 @@
       display: none;
     }
 
-    /* 辨識畫面 */
+    /* 主畫面 */
     #main {
       opacity: 0;
       transform: translateY(50px);
@@ -74,7 +74,7 @@
       animation: slideUp 1s ease forwards;
     }
 
-    /* 標題 */
+    /* 標題列 */
     #header {
       width: 100%;
       background: #2e7d32;
@@ -142,7 +142,7 @@
     <p id="cameraWarning">⚠️ 請允許相機權限才能使用系統</p>
   </div>
 
-  <!-- 辨識頁面 -->
+  <!-- 主畫面 -->
   <div id="main">
     <div id="header">🌏智慧垃圾分類系統</div>
     <h2>📷 開啟鏡頭拍照並分類</h2>
@@ -166,7 +166,7 @@
     const cameraWarning = document.getElementById("cameraWarning");
     let model;
 
-    // 封面切換
+    // 進入系統
     function enterSystem() {
       const cover = document.getElementById('cover');
       const main = document.getElementById('main');
@@ -181,17 +181,17 @@
     }
 
     // 回到封面
-    function returnToCover(errorMessage = "請允許相機權限才能使用系統") {
+    function returnToCover(message = "請允許相機權限才能使用系統") {
       const cover = document.getElementById('cover');
       const main = document.getElementById('main');
       main.style.display = "none";
       cover.style.display = "flex";
       cover.style.opacity = "1";
-      cameraWarning.innerText = "⚠️ " + errorMessage;
+      cameraWarning.innerText = "⚠️ " + message;
       cameraWarning.style.display = "block";
     }
 
-    // 開啟鏡頭與載入模型
+    // 啟動相機與載入模型
     async function loadCameraAndModel() {
       try {
         const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
@@ -250,4 +250,3 @@
   </script>
 </body>
 </html>
-
