@@ -148,7 +148,7 @@
 
   <!-- 辨識頁面 -->
   <div id="main">
-    <div id="header">🌏智慧垃圾分類系統</div>  <!-- ← 新增標題列 -->
+    <div id="header">🌏智慧垃圾分類系統</div>
     <h2>📷 開啟鏡頭拍照並分類</h2>
     <video id="video" width="360" height="480" autoplay playsinline muted></video>
     <br>
@@ -182,34 +182,46 @@
       }, 1000);
     }
 
+    // 回到封面
+    function backToCover(message) {
+      const cover = document.getElementById('cover');
+      const main = document.getElementById('main');
+      resultBox.style.display = "block";
+      resultBox.className = "hazard";
+      resultBox.innerText = message + " 🚪 即將返回封面...";
+      
+      setTimeout(() => {
+        main.style.display = "none";
+        cover.style.display = "flex";
+        cover.style.opacity = "1";
+      }, 3000);
+    }
+
     // 開啟鏡頭與載入模型
     async function loadCameraAndModel() {
       try {
-        navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } })
-          .then(stream => video.srcObject = stream)
-          .catch(err => {
-            console.error("無法開啟鏡頭: ", err);
-            resultBox.style.display = "block";
-            resultBox.className = "hazard";
-            resultBox.innerText = "⚠️ 無法開啟鏡頭：" + err.message;
-          });
+        const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
+        video.srcObject = stream;
+      } catch (err) {
+        console.error("無法開啟鏡頭: ", err);
+        backToCover("⚠️ 相機權限被拒絕或不可使用");
+        return;
+      }
 
-        resultBox.style.display = "block";
-        resultBox.className = "trash";
-        resultBox.innerText = "⏳ 模型載入中...";
+      resultBox.style.display = "block";
+      resultBox.className = "trash";
+      resultBox.innerText = "⏳ 模型載入中...";
 
+      try {
         const modelURL = "./model/model.json";
         const metadataURL = "./model/metadata.json";
         model = await window.tmImage.load(modelURL, metadataURL);
-
         snapBtn.disabled = false;
         resultBox.className = "recycle";
         resultBox.innerText = "✅ 模型載入完成，可以開始拍照分類！";
       } catch (err) {
         console.error("模型載入失敗：", err);
-        resultBox.style.display = "block";
-        resultBox.className = "hazard";
-        resultBox.innerText = "❌ 模型載入失敗！請確認 model 資料夾是否正確。";
+        backToCover("❌ 模型載入失敗");
       }
     }
 
@@ -248,5 +260,3 @@
   </script>
 </body>
 </html>
-
-
