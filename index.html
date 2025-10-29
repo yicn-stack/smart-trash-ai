@@ -20,7 +20,7 @@
       overflow: hidden;
     }
 
-    /* 封面頁 */
+    /* 封面 */
     #cover {
       position: absolute;
       inset: 0;
@@ -55,7 +55,7 @@
       transform: scale(1.05);
     }
 
-    /* 主系統畫面 */
+    /* 辨識畫面 */
     #main {
       opacity: 0;
       transform: translateY(50px);
@@ -67,7 +67,7 @@
       animation: slideUp 1s ease forwards;
     }
 
-    /* 新增標題列 */
+    /* 標題 */
     #header {
       width: 100%;
       background: #2e7d32;
@@ -140,13 +140,13 @@
 </head>
 <body>
 
-  <!-- 封面頁 -->
+  <!-- 封面 -->
   <div id="cover">
     <img src="model/LOGO.png" alt="LOGO">
     <button onclick="enterSystem()">進入系統</button>
   </div>
 
-  <!-- 主系統頁 -->
+  <!-- 辨識頁面 -->
   <div id="main">
     <div id="header">🌏智慧垃圾分類系統</div>  <!-- ← 新增標題列 -->
     <h2>📷 開啟鏡頭拍照並分類</h2>
@@ -169,7 +169,7 @@
     const snapBtn = document.getElementById("snap");
     let model;
 
-    // 封面動畫切換
+    // 封面切換
     function enterSystem() {
       const cover = document.getElementById('cover');
       const main = document.getElementById('main');
@@ -213,7 +213,7 @@
       }
     }
 
-    // 拍照 + 分類
+    // 拍照與分類
     snapBtn.addEventListener("click", async () => {
       context.drawImage(video, 0, 0, canvas.width, canvas.height);
 
@@ -248,4 +248,5 @@
   </script>
 </body>
 </html>
+
 
