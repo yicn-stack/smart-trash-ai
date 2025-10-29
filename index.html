@@ -210,7 +210,7 @@
         resultBox.innerText = "✅ 模型載入完成，可以開始拍照分類！";
       } catch (err) {
         console.error("無法開啟鏡頭: ", err);
-        alert("⚠️ 無法啟動鏡頭：" + err.message);
+        alert("⚠️ 無法啟動鏡頭");
         returnToCover("請允許相機權限後重新進入系統");
       }
     }
@@ -250,3 +250,4 @@
   </script>
 </body>
 </html>
+
