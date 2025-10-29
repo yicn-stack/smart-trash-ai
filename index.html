@@ -4,10 +4,7 @@
   <meta charset="UTF-8">
   <title>智慧垃圾分類系統</title>
   <style>
-    * {
-      box-sizing: border-box;
-      transition: all 0.6s ease;
-    }
+    * { box-sizing: border-box; transition: all 0.6s ease; }
     body {
       font-family: "Noto Sans TC", sans-serif;
       background: linear-gradient(135deg, #e0f7fa, #e8f5e9);
@@ -30,7 +27,7 @@
       align-items: center;
       background: radial-gradient(circle at center, #C1FFC1 0%, #B4EEB4 50%, #9BCD9B 100%);
       z-index: 2;
-      animation: fadeIn 1.5s ease forwards;
+      animation: fadeIn 1.2s ease forwards;
     }
     #cover img {
       width: 280px;
@@ -54,13 +51,6 @@
       background: #43a047;
       transform: scale(1.05);
     }
-    #cover p {
-      margin-top: 16px;
-      color: #b71c1c;
-      font-weight: bold;
-      font-size: 1rem;
-      display: none;
-    }
 
     /* 主畫面 */
     #main {
@@ -74,7 +64,6 @@
       animation: slideUp 1s ease forwards;
     }
 
-    /* 標題列 */
     #header {
       width: 100%;
       background: #2e7d32;
@@ -87,11 +76,7 @@
       letter-spacing: 2px;
     }
 
-    h2 {
-      margin-top: 20px;
-      color: #2e7d32;
-      font-size: 1.8rem;
-    }
+    h2 { margin-top: 20px; color: #2e7d32; font-size: 1.8rem; }
     video, canvas {
       border: 3px solid #a5d6a7;
       border-radius: 12px;
@@ -139,7 +124,6 @@
   <div id="cover">
     <img src="model/LOGO.png" alt="LOGO">
     <button onclick="enterSystem()">進入系統</button>
-    <p id="cameraWarning">⚠️ 請允許相機權限才能使用系統</p>
   </div>
 
   <!-- 主畫面 -->
@@ -163,14 +147,12 @@
     const context = canvas.getContext('2d');
     const resultBox = document.getElementById('result');
     const snapBtn = document.getElementById("snap");
-    const cameraWarning = document.getElementById("cameraWarning");
+    const cover = document.getElementById('cover');
+    const main = document.getElementById('main');
     let model;
 
-    // 進入系統
+    // 封面 → 主畫面
     function enterSystem() {
-      const cover = document.getElementById('cover');
-      const main = document.getElementById('main');
-      cameraWarning.style.display = "none";
       cover.style.animation = "fadeOut 1s ease forwards";
       setTimeout(() => {
         cover.style.display = "none";
@@ -180,27 +162,30 @@
       }, 1000);
     }
 
-    // 回到封面
-    function returnToCover(message = "請允許相機權限才能使用系統") {
-      const cover = document.getElementById('cover');
-      const main = document.getElementById('main');
+    // 返回封面（相機被拒絕）
+    function backToCover(message) {
       main.style.display = "none";
       cover.style.display = "flex";
-      cover.style.opacity = "1";
-      cameraWarning.innerText = "⚠️ " + message;
-      cameraWarning.style.display = "block";
+      cover.style.animation = "fadeIn 1s ease forwards";
+      alert(message + "\n請允許使用相機再試一次。");
     }
 
-    // 啟動相機與載入模型
+    // 開啟鏡頭與載入模型
     async function loadCameraAndModel() {
       try {
         const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
         video.srcObject = stream;
+      } catch (err) {
+        console.error("鏡頭存取失敗：", err);
+        backToCover("⚠️ 無法開啟鏡頭" );
+        return;
+      }
 
-        resultBox.style.display = "block";
-        resultBox.className = "trash";
-        resultBox.innerText = "⏳ 模型載入中...";
+      resultBox.style.display = "block";
+      resultBox.className = "trash";
+      resultBox.innerText = "⏳ 模型載入中...";
 
+      try {
         const modelURL = "./model/model.json";
         const metadataURL = "./model/metadata.json";
         model = await window.tmImage.load(modelURL, metadataURL);
@@ -209,9 +194,8 @@
         resultBox.className = "recycle";
         resultBox.innerText = "✅ 模型載入完成，可以開始拍照分類！";
       } catch (err) {
-        console.error("無法開啟鏡頭: ", err);
-        alert("⚠️ 無法啟動鏡頭");
-        returnToCover("請允許相機權限後重新進入系統");
+        console.error("模型載入失敗：", err);
+        backToCover("❌ 模型載入失敗，請確認 model 資料夾是否正確。");
       }
     }
 
