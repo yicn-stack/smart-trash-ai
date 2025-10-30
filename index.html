@@ -77,11 +77,13 @@
     }
 
     h2 { margin-top: 20px; color: #2e7d32; font-size: 1.8rem; }
+
     video, canvas {
       border: 3px solid #a5d6a7;
       border-radius: 12px;
       margin: 15px 0;
     }
+
     button {
       background: #66bb6a;
       color: white;
@@ -98,6 +100,7 @@
       transform: translateY(-2px);
       box-shadow: 0 6px 12px rgba(0,0,0,0.2);
     }
+
     #result {
       margin-top: 20px;
       font-size: 1.2rem;
@@ -154,7 +157,7 @@
 
     // 封面 → 主畫面
     async function enterSystem() {
-      stopCamera(); // 每次重新嘗試前先停掉相機
+      stopCamera();
       cover.style.animation = "fadeOut 1s ease forwards";
       setTimeout(() => {
         cover.style.display = "none";
@@ -164,13 +167,16 @@
       }, 1000);
     }
 
-    // 回到封面
+    // 回到封面 + 自動重新整理
     function backToCover(message) {
       stopCamera();
       main.style.display = "none";
       cover.style.display = "flex";
       cover.style.animation = "fadeIn 1s ease forwards";
-      alert(message + "\n請重新整理網頁並允許使用相機 再試一次。");
+      alert(message + "\n請允許使用相機再試一次。");
+      setTimeout(() => {
+        location.reload();
+      }, 800);
     }
 
     // 關閉攝影機串流
@@ -189,7 +195,7 @@
         video.srcObject = currentStream;
       } catch (err) {
         console.error("鏡頭存取失敗：", err);
-        backToCover("⚠️ 無法開啟鏡頭" );
+        backToCover("⚠️ 無法開啟鏡頭");
         return;
       }
 
@@ -201,7 +207,6 @@
         const modelURL = "./model/model.json";
         const metadataURL = "./model/metadata.json";
         model = await window.tmImage.load(modelURL, metadataURL);
-
         snapBtn.disabled = false;
         resultBox.className = "recycle";
         resultBox.innerText = "✅ 模型載入完成，可以開始拍照分類！";
@@ -235,7 +240,7 @@
 
         resultBox.className = cssClass;
         resultBox.style.display = "block";
-        resultBox.innerText = `${icon} 分類結果：${best.className} (${(best.probability*100).toFixed(2)}%)`;
+        resultBox.innerText = `${icon} 分類結果：${best.className} (${(best.probability * 100).toFixed(2)}%)`;
       } catch (err) {
         console.error("分類失敗：", err);
         resultBox.style.display = "block";
