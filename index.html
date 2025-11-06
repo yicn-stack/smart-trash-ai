@@ -1,264 +1,265 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
-  <meta charset="UTF-8">
-  <title>智慧垃圾分類系統</title>
-  <style>
-    * { box-sizing: border-box; transition: all 0.6s ease; }
-    body {
-      font-family: "Noto Sans TC", sans-serif;
-      background: linear-gradient(135deg, #e0f7fa, #e8f5e9);
-      margin: 0;
-      padding: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      overflow: hidden;
-    }
+<meta charset="UTF-8">
+<title>智慧垃圾分類系統</title>
+<style>
+* {
+  box-sizing: border-box;
+  transition: all 0.6s ease;
+}
+body {
+  font-family: "Noto Sans TC", sans-serif;
+  background: linear-gradient(135deg, #e0f7fa, #e8f5e9);
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  overflow: hidden;
+}
 
-    /* 封面 */
-    #cover {
-      position: absolute;
-      inset: 0;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      background: radial-gradient(circle at center, #C1FFC1 0%, #A5D6A7 50%, #81C784 100%);
-      z-index: 2;
-      animation: fadeIn 1.2s ease forwards;
-    }
-    #cover img {
-      width: 360px;
-      margin-bottom: 40px;
-      filter: drop-shadow(0 0 25px rgba(56, 142, 60, 0.6));
-      animation: float 3s ease-in-out infinite;
-    }
-    #cover button {
-      background: linear-gradient(145deg, #2e7d32, #43a047);
-      color: white;
-      border: none;
-      padding: 18px 48px;
-      font-size: 1.6rem;
-      font-weight: bold;
-      border-radius: 50px;
-      cursor: pointer;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
-      transition: all 0.4s ease;
-    }
-    #cover button:hover {
-      background: linear-gradient(145deg, #388e3c, #66bb6a);
-      transform: scale(1.08);
-      box-shadow: 0 10px 25px rgba(0,0,0,0.25);
-    }
+/* 封面 */
+#cover {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: radial-gradient(circle at center, #C1FFC1 0%, #B4EEB4 50%, #9BCD9B 100%);
+  z-index: 2;
+  animation: fadeIn 1.2s ease forwards;
+}
+#cover img {
+  width: 280px;
+  margin-bottom: 25px;
+  filter: drop-shadow(0 0 15px rgba(76, 175, 80, 0.8));
+  animation: float 3s ease-in-out infinite;
+}
+#cover button {
+  background: #2e7d32;
+  color: white;
+  border: none;
+  padding: 14px 36px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  border-radius: 30px;
+  cursor: pointer;
+  box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+  transition: all 0.3s ease;
+}
+#cover button:hover {
+  background: #43a047;
+  transform: scale(1.05);
+}
 
-    /* 主畫面 */
-    #main {
-      opacity: 0;
-      transform: translateY(50px);
-      display: none;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-      width: 100%;
-      animation: slideUp 1s ease forwards;
-    }
+/* 主畫面 */
+#main {
+  opacity: 0;
+  transform: translateY(50px);
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  width: 100%;
+  animation: slideUp 1s ease forwards;
+}
+#header {
+  width: 100%;
+  background: #2e7d32;
+  color: white;
+  text-align: center;
+  font-size: 1.8rem;
+  font-weight: bold;
+  padding: 18px 0;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+  letter-spacing: 2px;
+}
 
-    #header {
-      width: 100%;
-      background: #2e7d32;
-      color: white;
-      text-align: center;
-      font-size: 2rem;
-      font-weight: bold;
-      padding: 20px 0;
-      box-shadow: 0 3px 10px rgba(0,0,0,0.2);
-      letter-spacing: 2px;
-    }
+/* 調整標題位置（上移） */
+h2 {
+  margin-top: 10px;
+  color: #2e7d32;
+  font-size: 1.6rem;
+}
 
-    h2 { margin-top: 20px; color: #2e7d32; font-size: 1.8rem; }
+video, canvas {
+  border: 3px solid #a5d6a7;
+  border-radius: 12px;
+  margin: 10px 0;
+}
+button {
+  background: #66bb6a;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  font-size: 1rem;
+  font-weight: bold;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+button:hover {
+  background: #43a047;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+}
+#result {
+  margin-top: 20px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  padding: 12px 20px;
+  border-radius: 12px;
+  display: none;
+  min-width: 320px;
+  text-align: center;
+}
+.recycle {
+  background: #c8e6c9;
+  color: #1b5e20;
+}
+.trash {
+  background: #eeeeee;
+  color: #424242;
+}
+.hazard {
+  background: #ffcdd2;
+  color: #b71c1c;
+}
 
-    video, canvas {
-      border: 3px solid #a5d6a7;
-      border-radius: 12px;
-      margin: 20px 0;
-      max-width: 90%;
-    }
-
-    /* 按鈕樣式 */
-    button {
-      background: linear-gradient(145deg, #66bb6a, #43a047);
-      color: white;
-      border: none;
-      padding: 16px 40px;
-      font-size: 1.3rem;
-      font-weight: bold;
-      border-radius: 40px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-    button:hover {
-      background: linear-gradient(145deg, #81c784, #388e3c);
-      transform: scale(1.05);
-      box-shadow: 0 8px 16px rgba(0,0,0,0.2);
-    }
-    button:active {
-      transform: scale(0.95);
-      background: #2e7d32;
-    }
-
-    #result {
-      margin-top: 25px;
-      font-size: 1.3rem;
-      font-weight: bold;
-      padding: 14px 24px;
-      border-radius: 14px;
-      display: none;
-      min-width: 320px;
-      text-align: center;
-    }
-    .recycle { background: #c8e6c9; color: #1b5e20; }
-    .trash   { background: #eeeeee; color: #424242; }
-    .hazard  { background: #ffcdd2; color: #b71c1c; }
-
-    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-    @keyframes fadeOut { from { opacity: 1; } to { opacity: 0; transform: scale(1.05); } }
-    @keyframes slideUp { from { opacity: 0; transform: translateY(50px); } to { opacity: 1; transform: translateY(0); } }
-    @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
-  </style>
+/* 動畫 */
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes fadeOut { from { opacity: 1; } to { opacity: 0; transform: scale(1.05); } }
+@keyframes slideUp { from { opacity: 0; transform: translateY(50px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+</style>
 </head>
 <body>
+<!-- 封面 -->
+<div id="cover">
+  <img src="model/LOGO.png" alt="LOGO">
+  <button onclick="enterSystem()">進入系統</button>
+</div>
 
-  <!-- 封面 -->
-  <div id="cover">
-    <img src="model/LOGO.png" alt="LOGO">
-    <button onclick="enterSystem()">進入系統</button>
-  </div>
+<!-- 主畫面 -->
+<div id="main">
+  <div id="header">🌏智慧垃圾分類系統</div>
+  <h2>📷 開啟鏡頭拍照並分類</h2>
+  <video id="video" width="360" height="480" autoplay playsinline muted></video>
+  <br>
+  <button id="snap" disabled>拍照並分類</button>
+  <canvas id="canvas" width="360" height="480"></canvas>
+  <div id="result"></div>
+</div>
 
-  <!-- 主畫面 -->
-  <div id="main">
-    <div id="header">🌏 智慧垃圾分類系統</div>
-    <h2>📷 開啟鏡頭拍照並分類</h2>
-    <video id="video" width="360" height="480" autoplay playsinline muted></video>
-    <br>
-    <button id="snap" disabled>📸 拍照並分類</button>
-    <canvas id="canvas" width="360" height="480"></canvas>
-    <div id="result"></div>
-  </div>
+<!-- 模型與主程式 -->
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest"></script>
+<script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image/dist/teachablemachine-image.min.js"></script>
+<script>
+const video = document.getElementById('video');
+const canvas = document.getElementById('canvas');
+const context = canvas.getContext('2d');
+const resultBox = document.getElementById('result');
+const snapBtn = document.getElementById("snap");
+const cover = document.getElementById('cover');
+const main = document.getElementById('main');
+let model;
+let currentStream = null;
 
-  <!-- 模型與主程式 -->
-  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image/dist/teachablemachine-image.min.js"></script>
+// 封面 → 主畫面
+async function enterSystem() {
+  stopCamera();
+  cover.style.animation = "fadeOut 1s ease forwards";
+  setTimeout(() => {
+    cover.style.display = "none";
+    main.style.display = "flex";
+    main.style.opacity = "1";
+    loadCameraAndModel();
+  }, 1000);
+}
 
-  <script>
-    const video = document.getElementById('video');
-    const canvas = document.getElementById('canvas');
-    const context = canvas.getContext('2d');
-    const resultBox = document.getElementById('result');
-    const snapBtn = document.getElementById("snap");
-    const cover = document.getElementById('cover');
-    const main = document.getElementById('main');
-    let model;
-    let currentStream = null;
+// 回到封面
+function backToCover(message) {
+  stopCamera();
+  main.style.display = "none";
+  cover.style.display = "flex";
+  cover.style.animation = "fadeIn 1s ease forwards";
+  alert(message + "\n請允許使用相機再試一次。");
+}
 
-    // 封面 → 主畫面
-    async function enterSystem() {
-      stopCamera();
-      cover.style.animation = "fadeOut 1s ease forwards";
-      setTimeout(() => {
-        cover.style.display = "none";
-        main.style.display = "flex";
-        main.style.opacity = "1";
-        loadCameraAndModel();
-      }, 1000);
-    }
+// 關閉攝影機串流
+function stopCamera() {
+  if (currentStream) {
+    currentStream.getTracks().forEach(track => track.stop());
+    currentStream = null;
+  }
+  video.srcObject = null;
+}
 
-    // 回到封面 + 自動重新整理
-    function backToCover(message) {
-      stopCamera();
-      main.style.display = "none";
-      cover.style.display = "flex";
-      cover.style.animation = "fadeIn 1s ease forwards";
-      alert(message + "\n請允許使用相機再試一次。");
-      setTimeout(() => location.reload(), 800);
-    }
+// 開啟鏡頭與載入模型
+async function loadCameraAndModel() {
+  try {
+    currentStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
+    video.srcObject = currentStream;
+  } catch (err) {
+    console.error("鏡頭存取失敗：", err);
+    backToCover("⚠️ 無法開啟鏡頭");
+    return;
+  }
 
-    // 關閉攝影機串流
-    function stopCamera() {
-      if (currentStream) {
-        currentStream.getTracks().forEach(track => track.stop());
-        currentStream = null;
-      }
-      video.srcObject = null;
-    }
+  resultBox.style.display = "block";
+  resultBox.className = "trash";
+  resultBox.innerText = "⏳ 模型載入中...";
 
-    // 開啟鏡頭與載入模型
-    async function loadCameraAndModel() {
-      try {
-        currentStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
-        video.srcObject = currentStream;
-      } catch (err) {
-        console.error("鏡頭存取失敗：", err);
-        backToCover("⚠️ 無法開啟鏡頭");
-        return;
-      }
+  try {
+    const modelURL = "./model/model.json";
+    const metadataURL = "./model/metadata.json";
+    model = await window.tmImage.load(modelURL, metadataURL);
+    snapBtn.disabled = false;
+    resultBox.className = "recycle";
+    resultBox.innerText = "✅ 模型載入完成，可以開始拍照分類！";
+  } catch (err) {
+    console.error("模型載入失敗：", err);
+    backToCover("❌ 模型載入失敗，請確認 model 資料夾是否正確。");
+  }
+}
 
-      resultBox.style.display = "block";
-      resultBox.className = "trash";
-      resultBox.innerText = "⏳ 模型載入中...";
+// 拍照與分類
+snapBtn.addEventListener("click", async () => {
+  context.drawImage(video, 0, 0, canvas.width, canvas.height);
+  if (!model) {
+    resultBox.style.display = "block";
+    resultBox.className = "hazard";
+    resultBox.innerText = "⚠️ 模型尚未載入完成";
+    return;
+  }
 
-      try {
-        const modelURL = "./model/model.json";
-        const metadataURL = "./model/metadata.json";
-        model = await window.tmImage.load(modelURL, metadataURL);
-        snapBtn.disabled = false;
-        resultBox.className = "recycle";
-        resultBox.innerText = "✅ 模型載入完成，可以開始拍照分類！";
-      } catch (err) {
-        console.error("模型載入失敗：", err);
-        backToCover("❌ 模型載入失敗，請確認 model 資料夾是否正確。");
-      }
-    }
-
-    // 拍照與分類（改善延遲）
-    snapBtn.addEventListener("click", async () => {
-      // 拍照瞬間凍結畫面
-      snapBtn.disabled = true;
-      snapBtn.innerText = "📷 分類中...";
-      await new Promise(r => setTimeout(r, 100)); // 稍微等待畫面穩定
-
-      context.drawImage(video, 0, 0, canvas.width, canvas.height);
-
-      if (!model) {
-        resultBox.style.display = "block";
-        resultBox.className = "hazard";
-        resultBox.innerText = "⚠️ 模型尚未載入完成";
-        snapBtn.disabled = false;
-        snapBtn.innerText = "📸 拍照並分類";
-        return;
-      }
-
-      try {
-        const prediction = await model.predict(canvas);
-        let best = prediction.reduce((a, b) => a.probability > b.probability ? a : b);
-
-        let cssClass = "trash", icon = "🗑️";
-        if (best.className.includes("可回收")) { cssClass = "recycle"; icon = "♻️"; }
-        else if (best.className.includes("有害")) { cssClass = "hazard"; icon = "☠️"; }
-
-        resultBox.className = cssClass;
-        resultBox.style.display = "block";
-        resultBox.innerText = `${icon} 分類結果：${best.className} (${(best.probability * 100).toFixed(2)}%)`;
-      } catch (err) {
-        console.error("分類失敗：", err);
-        resultBox.className = "hazard";
-        resultBox.innerText = "⚠️ 分類過程發生錯誤：" + err.message;
-      } finally {
-        snapBtn.disabled = false;
-        snapBtn.innerText = "📸 拍照並分類";
-      }
+  try {
+    const prediction = await model.predict(canvas);
+    let best = prediction[0];
+    prediction.forEach(p => {
+      if (p.probability > best.probability) best = p;
     });
-  </script>
+
+    let cssClass = "trash", icon = "🗑️";
+    if (best.className.includes("可回收")) {
+      cssClass = "recycle"; icon = "♻️";
+    } else if (best.className.includes("有害")) {
+      cssClass = "hazard"; icon = "☠️";
+    }
+
+    resultBox.className = cssClass;
+    resultBox.style.display = "block";
+    resultBox.innerText = `${icon} 分類結果：${best.className} (${(best.probability*100).toFixed(2)}%)`;
+  } catch (err) {
+    console.error("分類失敗：", err);
+    resultBox.style.display = "block";
+    resultBox.className = "hazard";
+    resultBox.innerText = "⚠️ 分類過程發生錯誤：" + err.message;
+  }
+});
+</script>
 </body>
 </html>
