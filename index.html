@@ -1,205 +1,238 @@
 <!DOCTYPE html>
-<html lang="zh-Hant">
+<html lang="zh-TW">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>智慧垃圾分類系統</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: "Noto Sans TC", sans-serif;
-      background-color: #f0f8ff;
-      overflow: hidden;
-    }
+<meta charset="UTF-8">
+<title>智慧垃圾分類系統</title>
+<style>
+* { box-sizing: border-box; transition: all 0.6s ease; }
+body {
+  font-family: "Noto Sans TC", sans-serif;
+  background: linear-gradient(135deg, #e0f7fa, #e8f5e9);
+  margin: 0; padding: 0;
+  display: flex; justify-content: center; align-items: center;
+  height: 100vh; overflow: hidden;
+}
 
-    /* 封面樣式 */
-    #cover {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100vh;
-      background: linear-gradient(180deg, #e0f7fa, #f0f8ff);
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      transition: opacity 0.8s ease;
-      z-index: 10;
-    }
+/* 封面 */
+#cover {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column; justify-content: center; align-items: center;
+  background: radial-gradient(circle at center, #C1FFC1 0%, #B4EEB4 50%, #9BCD9B 100%);
+  z-index: 2; animation: fadeIn 1.2s ease forwards;
+}
+#cover img { width: 280px; margin-bottom: 25px; filter: drop-shadow(0 0 15px rgba(76,175,80,0.8)); animation: float 3s ease-in-out infinite; }
+#cover button {
+  background: #2e7d32; color: white; border: none; padding: 14px 36px;
+  font-size: 1.2rem; font-weight: bold; border-radius: 30px; cursor: pointer;
+  box-shadow: 0 6px 15px rgba(0,0,0,0.3); transition: all 0.3s ease;
+}
+#cover button:hover { background: #43a047; transform: scale(1.05); }
 
-    #cover img {
-      width: 180px;
-      margin-bottom: 30px;
-      animation: float 3s ease-in-out infinite;
-    }
+/* 主畫面 */
+#main {
+  opacity: 0; transform: translateY(50px); display: none;
+  flex-direction: column; align-items: center; text-align: center; width: 100%;
+  animation: slideUp 1s ease forwards;
+}
+#header {
+  width: 100%; background: #2e7d32; color: white; text-align: center;
+  font-size: 1.8rem; font-weight: bold; padding: 18px 0;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.2); letter-spacing: 2px;
+}
+h2 { margin-top: 10px; color: #2e7d32; font-size: 1.6rem; }
 
-    @keyframes float {
-      0% { transform: translateY(0px); }
-      50% { transform: translateY(-10px); }
-      100% { transform: translateY(0px); }
-    }
+video, canvas {
+  border: 3px solid #a5d6a7; border-radius: 12px; margin: 10px 0;
+}
+button {
+  background: #66bb6a; color: white; border: none;
+  padding: 12px 24px; font-size: 1rem; font-weight: bold;
+  border-radius: 25px; cursor: pointer; transition: all 0.3s ease;
+}
+button:hover {
+  background: #43a047; transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+}
+#result {
+  margin-top: 20px; font-size: 1.2rem; font-weight: bold;
+  padding: 12px 20px; border-radius: 12px; display: none;
+  min-width: 320px; text-align: center;
+}
+#tip {
+  margin-top: 12px;
+  font-size: 1rem;
+  background: #f1f8e9;
+  border-left: 5px solid #81c784;
+  color: #33691e;
+  padding: 10px 16px;
+  border-radius: 8px;
+  display: none;
+  max-width: 360px;
+  line-height: 1.5;
+  text-align: left;
+}
 
-    #cover button {
-      background-color: #00796b;
-      color: white;
-      font-size: 20px;
-      border: none;
-      padding: 12px 36px;
-      border-radius: 30px;
-      cursor: pointer;
-      transition: background-color 0.3s;
-    }
+.recycle { background: #c8e6c9; color: #1b5e20; }
+.trash { background: #eeeeee; color: #424242; }
+.hazard { background: #ffcdd2; color: #b71c1c; }
 
-    #cover button:hover {
-      background-color: #004d40;
-    }
-
-    /* 主畫面 */
-    #main {
-      display: none;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-start;
-      padding-top: 20px;
-      height: 100vh;
-    }
-
-    h1 {
-      margin: 0;
-      padding: 15px;
-      color: #004d40;
-      font-size: 28px;
-    }
-
-    video {
-      border: 3px solid #00796b;
-      border-radius: 12px;
-      width: 320px;
-      height: 240px;
-      margin-top: 20px;
-    }
-
-    #result-label {
-      font-size: 24px;
-      margin-top: 20px;
-      color: #333;
-    }
-
-    #result-tip {
-      font-size: 18px;
-      color: #555;
-      margin-top: 10px;
-      width: 80%;
-      text-align: center;
-      line-height: 1.5;
-    }
-
-    #back-btn {
-      margin-top: 30px;
-      background-color: #009688;
-      color: white;
-      border: none;
-      padding: 10px 24px;
-      border-radius: 20px;
-      font-size: 16px;
-      cursor: pointer;
-    }
-
-    #back-btn:hover {
-      background-color: #00796b;
-    }
-  </style>
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes fadeOut { from { opacity: 1; } to { opacity: 0; transform: scale(1.05); } }
+@keyframes slideUp { from { opacity: 0; transform: translateY(50px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes float { 0%,100%{transform:translateY(0);}50%{transform:translateY(-10px);} }
+</style>
 </head>
 <body>
 
-  <!-- 封面區 -->
-  <div id="cover">
-    <img src="model/專題LOGO.png" alt="系統LOGO">
-    <button id="enter-btn">進入系統</button>
-  </div>
+<!-- 封面 -->
+<div id="cover">
+  <img src="model/LOGO.png" alt="LOGO">
+  <button onclick="enterSystem()">進入系統</button>
+</div>
 
-  <!-- 主畫面 -->
-  <div id="main">
-    <h1>智慧垃圾分類系統</h1>
-    <video id="webcam" autoplay playsinline></video>
-    <h2 id="result-label">辨識中...</h2>
-    <p id="result-tip"></p>
-    <button id="back-btn">回到封面</button>
-  </div>
+<!-- 主畫面 -->
+<div id="main">
+  <div id="header">🌏智慧垃圾分類系統</div>
+  <h2>📷 開啟鏡頭拍照並分類</h2>
+  <video id="video" width="360" height="480" autoplay playsinline muted></video>
+  <br>
+  <button id="snap" disabled>拍照並分類</button>
+  <canvas id="canvas" width="360" height="480"></canvas>
+  <div id="result"></div>
+  <div id="tip"></div>
+</div>
 
-  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@3.11.0"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@0.8"></script>
+<!-- 模型與主程式 -->
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest"></script>
+<script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image/dist/teachablemachine-image.min.js"></script>
+<script>
+const video = document.getElementById('video');
+const canvas = document.getElementById('canvas');
+const context = canvas.getContext('2d');
+const resultBox = document.getElementById('result');
+const tipBox = document.getElementById('tip');
+const snapBtn = document.getElementById("snap");
+const cover = document.getElementById('cover');
+const main = document.getElementById('main');
+let model;
+let currentStream = null;
 
-  <script>
-    const URL = "model/"; // 模型資料夾
-    let model, webcam, maxPredictions;
+// 封面 → 主畫面
+async function enterSystem() {
+  stopCamera();
+  cover.style.animation = "fadeOut 1s ease forwards";
+  setTimeout(() => {
+    cover.style.display = "none";
+    main.style.display = "flex";
+    main.style.opacity = "1";
+    loadCameraAndModel();
+  }, 1000);
+}
 
-    const cover = document.getElementById("cover");
-    const main = document.getElementById("main");
-    const webcamElement = document.getElementById("webcam");
-    const labelElement = document.getElementById("result-label");
-    const tipElement = document.getElementById("result-tip");
+// 回到封面
+function backToCover(message) {
+  stopCamera();
+  main.style.display = "none";
+  cover.style.display = "flex";
+  cover.style.animation = "fadeIn 1s ease forwards";
+  alert(message + "\n請允許使用相機再試一次。");
+}
 
-    const tips = {
-      "塑膠類": "♻️ 寶特瓶壓扁再回收，可減少垃圾體積。如有液體請先倒掉。",
-      "紙類": "📄 紙張保持乾淨平整，勿混入塑膠膜或油污紙。",
-      "金屬類": "🥫 清洗乾淨後再回收，鋁罐壓扁可節省空間。",
-      "玻璃類": "🍾 小心破碎，分類前請去除瓶蓋與標籤。",
-      "紙餐具": "🍽 若沾油污請丟一般垃圾，乾淨可回收者另放。",
-      "一般垃圾": "🗑 無法回收的物品請確實包好，避免異味。",
-      "廚餘": "🌱 去除塑膠袋與異物，分類後可作為堆肥。"
-    };
+// 關閉攝影機
+function stopCamera() {
+  if (currentStream) {
+    currentStream.getTracks().forEach(track => track.stop());
+    currentStream = null;
+  }
+  video.srcObject = null;
+}
 
-    // 進入系統
-    document.getElementById("enter-btn").addEventListener("click", async () => {
-      cover.style.opacity = "0";
-      setTimeout(() => {
-        cover.style.display = "none";
-        main.style.display = "flex";
-        init();
-      }, 800);
+// 開啟鏡頭與載入模型
+async function loadCameraAndModel() {
+  try {
+    currentStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
+    video.srcObject = currentStream;
+  } catch (err) {
+    console.error("鏡頭存取失敗：", err);
+    backToCover("⚠️ 無法開啟鏡頭");
+    return;
+  }
+
+  resultBox.style.display = "block";
+  resultBox.className = "trash";
+  resultBox.innerText = "⏳ 模型載入中...";
+
+  try {
+    const modelURL = "./model/model.json";
+    const metadataURL = "./model/metadata.json";
+    model = await window.tmImage.load(modelURL, metadataURL);
+    snapBtn.disabled = false;
+    resultBox.className = "recycle";
+    resultBox.innerText = "✅ 模型載入完成，可以開始拍照分類！";
+  } catch (err) {
+    console.error("模型載入失敗：", err);
+    backToCover("❌ 模型載入失敗，請確認 model 資料夾是否正確。");
+  }
+}
+
+// 小提示資料庫（可自行擴充）
+const tips = {
+  "塑膠類": "💡 寶特瓶壓扁再回收，可減少垃圾體積；如有液體記得先倒掉！",
+  "紙類": "🧻 回收前請保持乾燥，避免油污或塑膠膜。",
+  "金屬類": "🔧 鐵鋁罐請壓扁，並確保內容物清空。",
+  "玻璃類": "🍾 請小心搬運，破損玻璃請妥善包裹後投放。",
+  "紙餐具": "🍽️ 若沾油污，請當作一般垃圾處理。",
+  "一般垃圾": "🚮 請確認無法回收後再投放，以減少污染。",
+  "有害垃圾": "☠️ 含電池、燈管等應交由專門回收處理。"
+};
+
+// 拍照與分類
+snapBtn.addEventListener("click", async () => {
+  context.drawImage(video, 0, 0, canvas.width, canvas.height);
+  tipBox.style.display = "none";
+
+  if (!model) {
+    resultBox.style.display = "block";
+    resultBox.className = "hazard";
+    resultBox.innerText = "⚠️ 模型尚未載入完成";
+    return;
+  }
+
+  try {
+    const prediction = await model.predict(canvas);
+    let best = prediction[0];
+    prediction.forEach(p => {
+      if (p.probability > best.probability) best = p;
     });
 
-    // 回到封面
-    document.getElementById("back-btn").addEventListener("click", () => {
-      if (webcam && webcam.stop) webcam.stop();
-      main.style.display = "none";
-      cover.style.display = "flex";
-      setTimeout(() => (cover.style.opacity = "1"), 100);
-    });
-
-    async function init() {
-      const modelURL = URL + "model.json";
-      const metadataURL = URL + "metadata.json";
-
-      model = await tmImage.load(modelURL, metadataURL);
-      maxPredictions = model.getTotalClasses();
-
-      const flip = true;
-      webcam = new tmImage.Webcam(320, 240, flip);
-      await webcam.setup();
-      await webcam.play();
-      window.requestAnimationFrame(loop);
-
-      webcamElement.srcObject = webcam.webcam;
+    let cssClass = "trash", icon = "🗑️";
+    if (best.className.includes("可回收") || best.className.includes("資源回收")) {
+      cssClass = "recycle"; icon = "♻️";
+    } else if (best.className.includes("有害")) {
+      cssClass = "hazard"; icon = "☠️";
     }
 
-    async function loop() {
-      webcam.update();
-      await predict();
-      window.requestAnimationFrame(loop);
+    resultBox.className = cssClass;
+    resultBox.style.display = "block";
+    resultBox.innerText = `${icon} 分類結果：${best.className} (${(best.probability*100).toFixed(2)}%)`;
+
+    // 顯示分類提示
+    for (let key in tips) {
+      if (best.className.includes(key)) {
+        tipBox.innerText = tips[key];
+        tipBox.style.display = "block";
+        break;
+      }
     }
 
-    async function predict() {
-      const prediction = await model.predict(webcam.canvas);
-      prediction.sort((a, b) => b.probability - a.probability);
-
-      const bestClass = prediction[0].className;
-      labelElement.innerText = "結果：" + bestClass;
-      tipElement.innerText = tips[bestClass] || "";
-    }
-  </script>
+  } catch (err) {
+    console.error("分類失敗：", err);
+    resultBox.style.display = "block";
+    resultBox.className = "hazard";
+    resultBox.innerText = "⚠️ 分類過程發生錯誤：" + err.message;
+  }
+});
+</script>
 </body>
 </html>
 
