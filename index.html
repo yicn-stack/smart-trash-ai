@@ -129,13 +129,17 @@ async function enterSystem() {
   }, 1000);
 }
 
-// 回到封面
+// 回到封面 + 自動刷新
 function backToCover(message) {
   stopCamera();
   main.style.display = "none";
   cover.style.display = "flex";
   cover.style.animation = "fadeIn 1s ease forwards";
   alert(message + "\n請允許使用相機再試一次。");
+  // 重新整理頁面，讓使用者可重新選擇權限
+  setTimeout(() => {
+    location.reload();
+  }, 1000);
 }
 
 // 關閉攝影機
@@ -154,7 +158,7 @@ async function loadCameraAndModel() {
     video.srcObject = currentStream;
   } catch (err) {
     console.error("鏡頭存取失敗：", err);
-    backToCover("⚠️ 無法開啟鏡頭");
+    backToCover("⚠️ 無法開啟鏡頭或未允許相機權限");
     return;
   }
 
@@ -175,7 +179,7 @@ async function loadCameraAndModel() {
   }
 }
 
-// 小提示資料庫（可自行擴充）
+// 小提示資料庫
 const tips = {
   "塑膠類": "💡 寶特瓶壓扁再回收，可減少垃圾體積；如有液體記得先倒掉！",
   "紙類": "🧻 回收前請保持乾燥，避免油污或塑膠膜。",
@@ -235,4 +239,3 @@ snapBtn.addEventListener("click", async () => {
 </script>
 </body>
 </html>
-
