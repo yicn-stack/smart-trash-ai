@@ -3,168 +3,252 @@
 <head>
 <meta charset="UTF-8">
 
-<!-- SEO 強化區 -->
+<!--基本 SEO -->
 <title>智慧垃圾分類系統｜Smart Trash AI</title>
-
 <meta name="description" content="智慧垃圾分類系統：透過 AI 影像辨識協助判斷紙類、塑膠、金屬、玻璃、紙餐具與一般垃圾，適合環境教育、教學示範與 AI 專題展示的互動式垃圾分類網站。">
 <meta name="keywords" content="智慧垃圾分類系統, AI垃圾分類, 垃圾影像辨識, 智能分類, AI專題, 環境教育, Smart Trash AI">
 <meta name="robots" content="index, follow">
 <meta name="author" content="Smart Trash AI">
 
-<!-- 讓 Google 能正確抓取 mobile 設定 -->
+<!-- 最佳化 -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<!-- SEO 強化區 -->
+
+
+<!-- 🔧 可愛插畫風 CSS（你目前的樣式） -->
+<style>
+   （這裡放你的全部 CSS）
+</style>
+
+</head>
+
 
 <style>
-* { box-sizing: border-box; transition: all 0.6s ease; }
+/* ------------------------
+   🌿 全域設計：可愛插畫風
+------------------------- */
+* { box-sizing: border-box; }
 body {
   font-family: "Noto Sans TC", sans-serif;
-  background: linear-gradient(135deg, #e0f7fa, #e8f5e9);
-  margin: 0; padding: 0;
-  display: flex; justify-content: center; align-items: center;
-  height: 100vh; overflow: hidden;
+  background: #e8f5e9;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  height: 100vh;
+  overflow-x: hidden;
 }
 
-/* 封面 */
+/* ------------------------
+   🌿 封面頁（可愛插畫風）
+------------------------- */
 #cover {
   position: absolute; inset: 0;
-  display: flex; flex-direction: column; justify-content: center; align-items: center;
-  background: radial-gradient(circle at center, #C1FFC1 0%, #B4EEB4 50%, #9BCD9B 100%);
-  z-index: 2; animation: fadeIn 1.2s ease forwards;
+  display: flex; flex-direction: column;
+  justify-content: center; align-items: center;
+  background: linear-gradient(135deg, #d0f8ce, #c8e6c9);
+  z-index: 3;
+  animation: fadeIn 1s ease forwards;
 }
-#cover img { width: 280px; margin-bottom: 25px; filter: drop-shadow(0 0 15px rgba(76,175,80,0.8)); animation: float 3s ease-in-out infinite; }
+
+#cover img {
+  width: 260px;
+  margin-bottom: 20px;
+  filter: drop-shadow(0 0 12px rgba(76,175,80,0.5));
+  animation: float 3s ease-in-out infinite;
+}
+
 #cover button {
-  background: #2e7d32; color: white; border: none; padding: 14px 36px;
-  font-size: 1.2rem; font-weight: bold; border-radius: 30px; cursor: pointer;
-  box-shadow: 0 6px 15px rgba(0,0,0,0.3); transition: all 0.3s ease;
+  background: #66bb6a;
+  color: white;
+  border: none;
+  padding: 16px 40px;
+  font-size: 1.3rem;
+  border-radius: 40px;
+  cursor: pointer;
+  box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+  transition: 0.3s;
 }
-#cover button:hover { background: #43a047; transform: scale(1.05); }
+#cover button:hover { transform: scale(1.06); }
 
-/* 主畫面 */
+/* ------------------------
+   🌿 主畫面（可愛 APP 風）
+------------------------- */
 #main {
-  opacity: 0; transform: translateY(50px); display: none;
-  flex-direction: column; align-items: center; text-align: center; width: 100%;
-  animation: slideUp 1s ease forwards;
+  width: 100%;
+  max-width: 480px;
+  margin-top: 0;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
 }
-#header {
-  width: 100%; background: #2e7d32; color: white; text-align: center;
-  font-size: 1.8rem; font-weight: bold; padding: 18px 0;
-  box-shadow: 0 3px 10px rgba(0,0,0,0.2); letter-spacing: 2px;
-}
-h2 { margin-top: 10px; color: #2e7d32; font-size: 1.6rem; }
 
-video, canvas {
-  border: 3px solid #a5d6a7; border-radius: 12px; margin: 10px 0;
+/* ------------------------
+   🌿 固定頂部標題列
+------------------------- */
+#header {
+  width: 100%;
+  background: #66bb6a;
+  color: white;
+  text-align: center;
+  font-size: 1.6rem;
+  font-weight: bold;
+  padding: 14px 0;
+  position: fixed;
+  top: 0;
+  z-index: 5;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.2);
 }
-button {
-  background: #66bb6a; color: white; border: none;
-  padding: 12px 24px; font-size: 1rem; font-weight: bold;
-  border-radius: 25px; cursor: pointer; transition: all 0.3s ease;
+
+/* ------------------------
+   🌿 攝影機區
+------------------------- */
+#cameraBox {
+  margin-top: 80px;
+  background: white;
+  padding: 12px 12px 20px;
+  border-radius: 18px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
 }
-button:hover {
-  background: #43a047; transform: translateY(-2px);
-  box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+
+video {
+  border-radius: 16px;
+  width: 340px;
 }
-#result {
-  margin-top: 20px; font-size: 1.2rem; font-weight: bold;
-  padding: 12px 20px; border-radius: 12px; display: none;
-  min-width: 320px; text-align: center;
+
+/* ------------------------
+   🌿 圓形拍照按鈕（可愛彈跳）
+------------------------- */
+#snap {
+  width: 85px;
+  height: 85px;
+  background: #81c784;
+  border-radius: 50%;
+  border: none;
+  margin-top: 15px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+  font-size: 1.1rem;
+  color: white;
+  cursor: pointer;
+  transition: 0.15s;
 }
+#snap:active { transform: scale(0.9); }
+
+/* ------------------------
+   🌿 辨識結果卡片（中型、浮起來）
+------------------------- */
+#resultCard {
+  margin-top: 20px;
+  background: white;
+  width: 90%;
+  max-width: 360px;
+  border-radius: 18px;
+  padding: 18px;
+  text-align: center;
+  display: none;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  animation: pop 0.3s ease;
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+/* 卡片顏色 */
+.recycle { border-left: 8px solid #66bb6a; }
+.trash { border-left: 8px solid #9e9e9e; }
+.hazard { border-left: 8px solid #e57373; }
+
+/* 小提示卡 */
 #tip {
-  margin-top: 12px;
-  font-size: 1rem;
+  margin-top: 10px;
   background: #f1f8e9;
+  padding: 12px 16px;
+  border-radius: 14px;
+  display: none;
+  width: 85%;
+  max-width: 360px;
   border-left: 5px solid #81c784;
   color: #33691e;
-  padding: 10px 16px;
-  border-radius: 8px;
-  display: none;
-  max-width: 360px;
+  font-size: 0.95rem;
   line-height: 1.5;
-  text-align: left;
 }
 
-.recycle { background: #c8e6c9; color: #1b5e20; }
-.trash { background: #eeeeee; color: #424242; }
-.hazard { background: #ffcdd2; color: #b71c1c; }
-
-@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-@keyframes fadeOut { from { opacity: 1; } to { opacity: 0; transform: scale(1.05); } }
-@keyframes slideUp { from { opacity: 0; transform: translateY(50px); } to { opacity: 1; transform: translateY(0); } }
-@keyframes float { 0%,100%{transform:translateY(0);}50%{transform:translateY(-10px);} }
+/* 動畫 */
+@keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+@keyframes float { 0%,100%{transform:translateY(0);}50%{transform:translateY(-8px);} }
+@keyframes pop { from{transform:scale(0.9);} to{transform:scale(1);} }
 </style>
 </head>
 <body>
+<!-- 隱藏標題（SEO friendly） -->
+<h1 style="display:none;">智慧垃圾分類系統 AI 垃圾辨識</h1>
 
-<!-- Google 讀取網站 -->
-<h1 style="display:none;">智慧垃圾分類系統（Smart Trash AI）</h1>
-
-<!-- 封面 -->
+<!-- 封面頁 -->
 <div id="cover">
   <img src="model/LOGO.png" alt="LOGO">
-
-  <!-- Google 用 -->
-  <p style="max-width:420px; text-align:center; font-size:0.9rem; color:#2e7d32; margin-bottom:18px;">
-    本系統利用 AI 影像辨識協助垃圾分類，支援紙類、塑膠、金屬、玻璃、紙餐具與一般垃圾，
-    適合課堂展示、教學示範與環境教育。
-  </p>
-
   <button onclick="enterSystem()">進入系統</button>
 </div>
 
 <!-- 主畫面 -->
 <div id="main">
-  <div id="header">🌏智慧垃圾分類系統</div>
-  <h2>📷 開啟鏡頭拍照並分類</h2>
-  <video id="video" width="360" height="480" autoplay playsinline muted></video>
-  <br>
-  <button id="snap" disabled>拍照並分類</button>
-  <canvas id="canvas" width="360" height="480"></canvas>
-  <div id="result"></div>
+  <div id="header">🌏 智慧垃圾分類系統</div>
+
+  <div id="cameraBox">
+    <video id="video" autoplay playsinline muted></video>
+    <button id="snap" disabled>拍照</button>
+  </div>
+
+  <div id="resultCard"></div>
   <div id="tip"></div>
 </div>
 
-<!-- 模型與主程式 -->
+<!-- Tensorflow / Teachable Machine -->
 <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest"></script>
 <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image/dist/teachablemachine-image.min.js"></script>
+
 <script>
 const video = document.getElementById('video');
-const canvas = document.getElementById('canvas');
-const context = canvas.getContext('2d');
-const resultBox = document.getElementById('result');
-const tipBox = document.getElementById('tip');
-const snapBtn = document.getElementById("snap");
+const snapBtn = document.getElementById('snap');
 const cover = document.getElementById('cover');
 const main = document.getElementById('main');
+const resultCard = document.getElementById('resultCard');
+const tipBox = document.getElementById('tip');
+
 let model;
 let currentStream = null;
 
-// 封面 → 主畫面
+/* -----------------------------
+   🌿 封面 → 啟動系統
+------------------------------ */
 async function enterSystem() {
   stopCamera();
   cover.style.animation = "fadeOut 1s ease forwards";
+
   setTimeout(() => {
     cover.style.display = "none";
     main.style.display = "flex";
-    main.style.opacity = "1";
     loadCameraAndModel();
-  }, 1000);
+  }, 900);
 }
 
-// 回到封面 + 自動刷新
+/* -----------------------------
+   🌿 回到封面並重新整理（讓使用者可重新選擇權限）
+------------------------------ */
 function backToCover(message) {
   stopCamera();
   main.style.display = "none";
   cover.style.display = "flex";
-  cover.style.animation = "fadeIn 1s ease forwards";
-  alert(message + "\n請允許使用相機再試一次。");
-  // 重新整理頁面，讓使用者可重新選擇權限
+
+  alert(message + "\n請允許相機後再重新點選『進入系統』。");
+
   setTimeout(() => {
-    location.reload();
-  }, 1000);
+    location.reload();  // 自動刷新頁面
+  }, 600);
 }
 
-// 關閉攝影機
+/* -----------------------------
+   🌿 關閉相機
+------------------------------ */
 function stopCamera() {
   if (currentStream) {
     currentStream.getTracks().forEach(track => track.stop());
@@ -173,74 +257,87 @@ function stopCamera() {
   video.srcObject = null;
 }
 
-// 開啟鏡頭與載入模型
+/* -----------------------------
+   🌿 開啟相機 & 載入模型
+------------------------------ */
 async function loadCameraAndModel() {
   try {
-    currentStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
+    currentStream = await navigator.mediaDevices.getUserMedia({ 
+      video: { facingMode: "environment" } 
+    });
     video.srcObject = currentStream;
   } catch (err) {
-    console.error("鏡頭存取失敗：", err);
-    backToCover("⚠️ 無法開啟鏡頭或未允許相機權限");
+    console.error("相機失敗：", err);
+    backToCover("⚠️ 無法開啟相機或未允許相機權限");
     return;
   }
 
-  resultBox.style.display = "block";
-  resultBox.className = "trash";
-  resultBox.innerText = "⏳ 模型載入中...";
+  resultCard.style.display = "block";
+  resultCard.className = "trash";
+  resultCard.innerText = "⏳ 模型載入中...";
 
   try {
     const modelURL = "./model/model.json";
     const metadataURL = "./model/metadata.json";
     model = await window.tmImage.load(modelURL, metadataURL);
+
     snapBtn.disabled = false;
-    resultBox.className = "recycle";
-    resultBox.innerText = "✅ 模型載入完成，可以開始拍照分類！";
+    resultCard.className = "recycle";
+    resultCard.innerText = "✅ 模型載入完成，可以開始拍照分類！";
   } catch (err) {
     console.error("模型載入失敗：", err);
     backToCover("❌ 模型載入失敗，請確認 model 資料夾是否正確。");
   }
 }
 
-// 小提示資料庫
+/* -----------------------------
+   🌿 小知識資料庫（可自行擴充）
+------------------------------ */
 const tips = {
   "塑膠類": "💡 寶特瓶壓扁再回收，可減少垃圾體積；如有液體記得先倒掉！",
-  "紙類": "🧻 回收前請保持乾燥，避免油污或塑膠膜。",
-  "金屬類": "🔧 鐵鋁罐請壓扁，並確保內容物清空。",
-  "玻璃類": "🍾 請小心搬運，破損玻璃請妥善包裹後投放。",
-  "紙餐具": "🍽️ 若沾油污，請當作一般垃圾處理。",
-  "一般垃圾": "🚮 請確認無法回收後再投放，以減少污染。",
-  "有害垃圾": "☠️ 含電池、燈管等應交由專門回收處理。"
+  "紙類": "🧻 紙張保持乾燥，避免油污與塑膠膜。",
+  "金屬類": "🔧 鐵鋁罐壓扁後再回收，可節省空間。",
+  "玻璃類": "🍾 破損玻璃請用紙包好再投入。",
+  "紙餐具": "🍽️ 若紙餐具沾油污，請丟一般垃圾。",
+  "一般垃圾": "🚮 請再次確認是否仍有可回收部分。",
+  "有害垃圾": "☠️ 電池、燈管等需特別回收處理。"
 };
 
-// 拍照與分類
+/* -----------------------------
+   🌿 拍照 + 分類
+------------------------------ */
 snapBtn.addEventListener("click", async () => {
-  context.drawImage(video, 0, 0, canvas.width, canvas.height);
+  // 轉成 canvas（但不顯示）
+  const canvas = document.createElement("canvas");
+  canvas.width = video.videoWidth;
+  canvas.height = video.videoHeight;
+  const ctx = canvas.getContext("2d");
+  ctx.drawImage(video, 0, 0);
+
   tipBox.style.display = "none";
 
-  if (!model) {
-    resultBox.style.display = "block";
-    resultBox.className = "hazard";
-    resultBox.innerText = "⚠️ 模型尚未載入完成";
-    return;
-  }
+  if (!model) return;
 
   try {
     const prediction = await model.predict(canvas);
     let best = prediction[0];
+
     prediction.forEach(p => {
       if (p.probability > best.probability) best = p;
     });
 
     let cssClass = "trash", icon = "🗑️";
+
     if (best.className.includes("可回收") || best.className.includes("資源回收")) {
       cssClass = "recycle"; icon = "♻️";
     } else if (best.className.includes("有害")) {
       cssClass = "hazard"; icon = "☠️";
     }
 
-    resultBox.className = cssClass;
-    resultBox.style.display = "block";
-    resultBox.innerText = `${icon} 分類結果：${best.className} (${(best.probability*100).toFixed(2)}%)`;
+    resultCard.className = cssClass;
+    resultCard.style.display = "block";
+    resultCard.innerHTML =
+      `${icon} <br> <b>${best.className}</b><br><small>${(best.probability * 100).toFixed(2)}%</small>`;
 
     // 顯示分類提示
     for (let key in tips) {
@@ -252,15 +349,11 @@ snapBtn.addEventListener("click", async () => {
     }
 
   } catch (err) {
-    console.error("分類失敗：", err);
-    resultBox.style.display = "block";
-    resultBox.className = "hazard";
-    resultBox.innerText = "⚠️ 分類過程發生錯誤：" + err.message;
+    console.error("辨識錯誤：", err);
+    resultCard.className = "hazard";
+    resultCard.innerText = "⚠️ 分類錯誤：" + err.message;
   }
 });
 </script>
 </body>
 </html>
-
-
-
