@@ -40,24 +40,49 @@ body {
   z-index: 3;
   animation: fadeIn 1s ease forwards;
 }
+
 #cover img {
   width: 260px;
   margin-bottom: 20px;
   filter: drop-shadow(0 0 12px rgba(76,175,80,0.5));
   animation: float 3s ease-in-out infinite;
 }
-#cover button {
-  background: #66bb6a;
-  color: white;
-  border: none;
-  padding: 16px 40px;
-  font-size: 1.3rem;
+
+/* 🌿 封面按鈕美化（兩種樣式） */
+.cover-btn {
+  width: 230px;
+  padding: 16px 0;
+  margin-top: 10px;
+  font-size: 1.25rem;
+  font-weight: bold;
   border-radius: 40px;
   cursor: pointer;
-  box-shadow: 0 6px 15px rgba(0,0,0,0.2);
-  transition: 0.3s;
+  transition: 0.28s;
+  box-shadow: 0 5px 12px rgba(0,0,0,0.15);
+  border: none;
 }
-#cover button:hover { transform: scale(1.06); }
+
+/* 主按鈕（綠色） */
+.cover-btn.primary {
+  background: #66bb6a;
+  color: white;
+}
+.cover-btn.primary:hover {
+  background: #57a65c;
+  transform: translateY(-3px);
+}
+
+/* 次按鈕（白底綠框） */
+.cover-btn.secondary {
+  background: white;
+  color: #388e3c;
+  border: 3px solid #66bb6a;
+}
+.cover-btn.secondary:hover {
+  background: #f1f8f1;
+  transform: translateY(-3px);
+}
+
 
 /* 主畫面 */
 #main {
@@ -173,9 +198,11 @@ video {
 <!-- 封面 -->
 <div id="cover">
   <img src="model/LOGO.png" alt="LOGO">
-  <button onclick="enterSystem()">進入系統</button>
-  <button onclick="location.href='knowledge.html'">分類小知識</button>
+
+  <button class="cover-btn primary" onclick="enterSystem()">進入系統</button>
+  <button class="cover-btn secondary" onclick="location.href='knowledge.html'">分類小知識</button>
 </div>
+
 
 <!-- 主畫面 -->
 <div id="main">
@@ -322,4 +349,5 @@ snapBtn.addEventListener("click", async () => {
 </script>
 </body>
 </html>
+
 
