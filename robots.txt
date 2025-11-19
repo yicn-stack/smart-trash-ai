@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://yicn-stack.github.io/smart-trash-ai/sitemap.xml
