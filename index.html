@@ -12,9 +12,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-/* ------------------------
-   🌿 可愛插畫系統風格
-------------------------- */
+/* 系統風格*/
 * { box-sizing: border-box; }
 body {
   font-family: "Noto Sans TC", sans-serif;
@@ -48,7 +46,7 @@ body {
   animation: float 3s ease-in-out infinite;
 }
 
-/* 🌿 封面按鈕美化（兩種樣式） */
+/*封面按鈕 */
 .cover-btn {
   width: 230px;
   padding: 16px 0;
@@ -82,6 +80,7 @@ body {
   background: #f1f8f1;
   transform: translateY(-3px);
 }
+
 
 
 /* 主畫面 */
@@ -199,11 +198,20 @@ video {
 <div id="cover">
   <img src="model/LOGO.png" alt="LOGO">
 
-  <button class="coverBtn" onclick="enterSystem()">進入系統</button>
-<button class="coverBtn" onclick="location.href='knowledge.html'">分類小知識</button>
-<button class="coverBtn" onclick="location.href='reduce.html'">垃圾減量 Tips</button>
+  <!-- 主按鈕：進入系統 -->
+  <button class="cover-btn primary" onclick="enterSystem()">進入系統</button>
 
+  <!-- 次按鈕：分類小知識 -->
+  <button class="cover-btn secondary" onclick="location.href='knowledge.html'">
+    分類小知識
+  </button>
+
+  <!-- 次按鈕：垃圾減量 Tips -->
+  <button class="cover-btn secondary" onclick="location.href='reduce.html'">
+    垃圾減量 Tips
+  </button>
 </div>
+
 
 
 <!-- 主畫面 -->
@@ -351,6 +359,7 @@ snapBtn.addEventListener("click", async () => {
 </script>
 </body>
 </html>
+
 
 
 
