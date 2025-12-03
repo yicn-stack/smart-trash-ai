@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<title>垃圾減量 Tips｜Smart Trash AI</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body {
+  font-family: "Noto Sans TC", sans-serif;
+  background: #f1f8e9;
+  margin: 0; padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* 標題列 */
+#header {
+  width: 100%;
+  background: #66bb6a;
+  color: white;
+  text-align: center;
+  font-size: 1.6rem;
+  font-weight: bold;
+  padding: 14px 0;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+}
+
+/* 卡片區容器 */
+#tipsContainer {
+  margin-top: 20px;
+  width: 90%;
+  max-width: 480px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* 卡片樣式 */
+.tipCard {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 18px 20px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.12);
+  border-left: 6px solid #81c784;
+  animation: fadeIn 0.5s ease;
+}
+
+.tipCard h3 {
+  margin: 0 0 8px;
+  color: #2e7d32;
+}
+
+.tipCard p {
+  margin: 0;
+  color: #33691e;
+  line-height: 1.5;
+}
+
+/* 返回封面按鈕 */
+#backHome {
+  margin: 22px 0;
+  background: #a5d6a7;
+  color: #1b5e20;
+  border: none;
+  padding: 12px 30px;
+  font-size: 1.1rem;
+  border-radius: 28px;
+  cursor: pointer;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+}
+#backHome:hover { background: #81c784; }
+
+/* 動畫 */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+</style>
+
+</head>
+<body>
+
+<div id="header">🌿 垃圾減量小技巧</div>
+
+<div id="tipsContainer">
+
+  <div class="tipCard">
+    <h3>🥢 自備餐具</h3>
+    <p>用餐時自備筷子、湯匙與餐盒，可大幅減少一次性餐具的使用。</p>
+  </div>
+
+  <div class="tipCard">
+    <h3>☕ 自備飲料杯</h3>
+    <p>購買飲料可自備環保杯，多數飲料店還會提供折扣，環保又省錢！</p>
+  </div>
+
+  <div class="tipCard">
+    <h3>🛍 減少過度包裝</h3>
+    <p>購物時選擇簡單包裝的產品，或自備購物袋、蔬果袋。</p>
+  </div>
+
+  <div class="tipCard">
+    <h3>🍱 避免使用一次性容器</h3>
+    <p>常備可重複使用的餐盒、保鮮盒，外帶時也能拒絕一次性塑膠。</p>
+  </div>
+
+  <div class="tipCard">
+    <h3>🧴 選購可補充式商品</h3>
+    <p>盡量選擇可補充包的清潔用品、洗髮精、沐浴乳，減少塑膠瓶浪費。</p>
+  </div>
+
+  <div class="tipCard">
+    <h3>🔄物品再利用</h3>
+    <p>紙袋、瓶罐、紙箱都可再利用，讓物品的壽命延長。</p>
+  </div>
+
+</div>
+
+<button id="backHome" onclick="location.href='index.html'">返回首頁</button>
+
+</body>
+</html>
