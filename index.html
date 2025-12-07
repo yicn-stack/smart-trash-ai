@@ -81,8 +81,6 @@ body {
   transform: translateY(-3px);
 }
 
-
-
 /* 主畫面 */
 #main {
   width: 100%;
@@ -196,6 +194,7 @@ video {
 
 <!-- 封面 -->
 <div id="cover">
+  <!-- LOGO 照舊放在 model/LOGO.png -->
   <img src="model/LOGO.png" alt="LOGO">
 
   <!-- 主按鈕：進入系統 -->
@@ -211,8 +210,6 @@ video {
     垃圾減量 Tips
   </button>
 </div>
-
-
 
 <!-- 主畫面 -->
 <div id="main">
@@ -230,9 +227,8 @@ video {
   <button id="backHome" onclick="goHome()">回首頁</button>
 </div>
 
-<!-- ML Library -->
+<!-- ✅ 只需要 TensorFlow.js，不再載入 Teachable Machine -->
 <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest"></script>
-<script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image/dist/teachablemachine-image.min.js"></script>
 
 <script>
 const video = document.getElementById('video');
@@ -244,6 +240,31 @@ const tipBox = document.getElementById('tip');
 
 let model;
 let currentStream = null;
+
+/* ✅ L2 模型輸出順序，要跟你訓練時 class_names 一樣 */
+const classNames = ["battery", "foodbox", "general", "glass", "metal", "paper", "plastic"];
+
+/* 將英文類別轉成中文名稱、UI 類型、提示對應 key */
+function mapLabelInfo(labelEn) {
+  switch (labelEn) {
+    case "plastic":
+      return { display: "塑膠類", type: "recycle", tipKey: "塑膠類" };
+    case "paper":
+      return { display: "紙類", type: "recycle", tipKey: "紙類" };
+    case "metal":
+      return { display: "金屬類", type: "recycle", tipKey: "金屬類" };
+    case "glass":
+      return { display: "玻璃類", type: "recycle", tipKey: "玻璃類" };
+    case "foodbox":
+      return { display: "紙餐具", type: "trash", tipKey: "紙餐具" };
+    case "general":
+      return { display: "一般垃圾", type: "trash", tipKey: "一般垃圾" };
+    case "battery":
+      return { display: "有害垃圾", type: "hazard", tipKey: "有害垃圾" };
+    default:
+      return { display: labelEn, type: "trash", tipKey: "" };
+  }
+}
 
 async function enterSystem() {
   stopCamera();
@@ -280,6 +301,7 @@ function goHome() {
 }
 
 async function loadCameraAndModel() {
+  // 開相機
   try {
     currentStream = await navigator.mediaDevices.getUserMedia({ video:{facingMode:"environment"} });
     video.srcObject = currentStream;
@@ -289,18 +311,18 @@ async function loadCameraAndModel() {
     return;
   }
 
+  // 顯示模型載入中
   resultCard.style.display = "block";
   resultCard.className = "trash";
   resultCard.innerText = "⏳ 模型載入中...";
 
+  // 載入 L2 TensorFlow.js 模型（放在 model_new）
   try {
-    const modelURL = "./model/model.json";
-    const metadataURL = "./model/metadata.json";
-    model = await window.tmImage.load(modelURL, metadataURL);
-
+    model = await tf.loadLayersModel("./model_new/model.json");
     snapBtn.disabled = false;
     resultCard.className = "recycle";
     resultCard.innerText = "✅ 模型載入完成，可以開始拍照分類！";
+    console.log("模型載入完成");
   } catch (err) {
     console.error("模型失敗：", err);
     backToCover("❌ 模型載入失敗");
@@ -327,27 +349,52 @@ snapBtn.addEventListener("click", async () => {
   tipBox.style.display = "none";
 
   try {
-    const prediction = await model.predict(canvas);
-    let best = prediction[0];
-    prediction.forEach(p => { if (p.probability > best.probability) best = p; });
+    const imgSize = 224; // 要跟訓練時一致
+    let tensor = tf.browser.fromPixels(canvas)
+      .resizeBilinear([imgSize, imgSize])
+      .toFloat()
+      .div(255.0)
+      .expandDims(0); // [1,224,224,3]
 
-    let cssClass = "trash", icon = "🗑️";
-    if (best.className.includes("可回收") || best.className.includes("資源回收")) {
-      cssClass = "recycle"; icon = "♻️";
-    } else if (best.className.includes("有害")) {
-      cssClass = "hazard"; icon = "☠️";
+    const prediction = model.predict(tensor);
+    const data = await prediction.data();
+
+    // 用完釋放記憶體
+    tensor.dispose();
+    prediction.dispose();
+
+    // 找出最大機率
+    let maxIndex = 0;
+    let maxProb = data[0];
+    for (let i = 1; i < data.length; i++) {
+      if (data[i] > maxProb) {
+        maxProb = data[i];
+        maxIndex = i;
+      }
+    }
+
+    const labelEn = classNames[maxIndex];
+    const info = mapLabelInfo(labelEn);
+    const probText = (maxProb * 100).toFixed(2) + "%";
+
+    // 設定 UI 樣式與 icon
+    let cssClass = "trash";
+    let icon = "🗑️";
+    if (info.type === "recycle") {
+      cssClass = "recycle";
+      icon = "♻️";
+    } else if (info.type === "hazard") {
+      cssClass = "hazard";
+      icon = "☠️";
     }
 
     resultCard.className = cssClass;
     resultCard.style.display = "block";
-    resultCard.innerHTML = `${icon}<br><b>${best.className}</b><br><small>${(best.probability*100).toFixed(2)}%</small>`;
+    resultCard.innerHTML = `${icon}<br><b>${info.display}</b><br><small>${probText}</small>`;
 
-    for (let key in tips) {
-      if (best.className.includes(key)) {
-        tipBox.innerText = tips[key];
-        tipBox.style.display = "block";
-        break;
-      }
+    if (info.tipKey && tips[info.tipKey]) {
+      tipBox.innerText = tips[info.tipKey];
+      tipBox.style.display = "block";
     }
 
   } catch (err) {
@@ -359,11 +406,3 @@ snapBtn.addEventListener("click", async () => {
 </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
