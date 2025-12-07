@@ -316,7 +316,7 @@ async function loadCameraAndModel() {
   resultCard.className = "trash";
   resultCard.innerText = "⏳ 模型載入中...";
 
-  // 載入 L2 TensorFlow.js 模型（放在 model_new）
+  //模型
   try {
    model = await tf.loadLayersModel(
   "https://pub-8a57ae65bc8147078e78fa4e3d940303.r2.dev/model.json"
@@ -409,6 +409,7 @@ snapBtn.addEventListener("click", async () => {
 </script>
 </body>
 </html>
+
 
 
 
