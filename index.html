@@ -318,7 +318,7 @@ async function loadCameraAndModel() {
 
   // 載入 L2 TensorFlow.js 模型（放在 model_new）
   try {
-    model = await tf.loadLayersModel("./model_new/model.json");
+    model = await tf.loadLayersModel("model_new/model.json");
     snapBtn.disabled = false;
     resultCard.className = "recycle";
     resultCard.innerText = "✅ 模型載入完成，可以開始拍照分類！";
@@ -406,3 +406,4 @@ snapBtn.addEventListener("click", async () => {
 </script>
 </body>
 </html>
+
