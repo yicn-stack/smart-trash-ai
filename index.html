@@ -228,7 +228,7 @@ video {
 </div>
 
 <!-- ✅ 只需要 TensorFlow.js，不再載入 Teachable Machine -->
-<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest"></script>
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.9.0"></script>
 
 <script>
 const video = document.getElementById('video');
@@ -301,26 +301,17 @@ function goHome() {
 }
 
 async function loadCameraAndModel() {
-  // 開相機
-  try {
-    currentStream = await navigator.mediaDevices.getUserMedia({ video:{facingMode:"environment"} });
-    video.srcObject = currentStream;
-  } catch (err) {
-    console.error("相機失敗：", err);
-    backToCover("⚠️ 無法開啟相機或未允許相機權限");
-    return;
-  }
+  // 先開相機（你原本的程式碼照舊）
 
   // 顯示模型載入中
   resultCard.style.display = "block";
   resultCard.className = "trash";
   resultCard.innerText = "⏳ 模型載入中...";
 
-  //模型
   try {
-   model = await tf.loadLayersModel(
-  "https://pub-8a57ae65bc8147078e78fa4e3d940303.r2.dev/model.json"
-);
+    model = await tf.loadLayersModel(
+      "https://pub-8a57ae65bc8147078e78fa4e3d940303.r2.dev/tfjs-model-new/model.json"
+    );
 
     snapBtn.disabled = false;
     resultCard.className = "recycle";
@@ -331,6 +322,7 @@ async function loadCameraAndModel() {
     backToCover("❌ 模型載入失敗");
   }
 }
+
 
 const tips = {
   "塑膠類": "💡 如果容器內有液體記得先倒掉喔！",
@@ -409,6 +401,7 @@ snapBtn.addEventListener("click", async () => {
 </script>
 </body>
 </html>
+
 
 
 
