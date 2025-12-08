@@ -247,19 +247,19 @@ const classNames = ['general', 'paper', 'plastic', 'metal', 'glass', 'foodbox', 
 /* 將英文類別轉成中文名稱、UI 類型、提示對應 key */
 function mapLabelInfo(labelEn) {
   switch (labelEn) {
+      case "general":
+      return { display: "一般垃圾", type: "trash", tipKey: "一般垃圾" };
+       case "paper":
+      return { display: "紙類", type: "recycle", tipKey: "紙類" };
     case "plastic":
       return { display: "塑膠類", type: "recycle", tipKey: "塑膠類" };
-    case "paper":
-      return { display: "紙類", type: "recycle", tipKey: "紙類" };
-    case "metal":
+       case "metal":
       return { display: "金屬類", type: "recycle", tipKey: "金屬類" };
     case "glass":
       return { display: "玻璃類", type: "recycle", tipKey: "玻璃類" };
     case "foodbox":
       return { display: "紙餐具", type: "trash", tipKey: "紙餐具" };
-    case "general":
-      return { display: "一般垃圾", type: "trash", tipKey: "一般垃圾" };
-    case "battery":
+        case "battery":
       return { display: "有害垃圾", type: "hazard", tipKey: "有害垃圾" };
     default:
       return { display: labelEn, type: "trash", tipKey: "" };
@@ -409,6 +409,7 @@ snapBtn.addEventListener("click", async () => {
 </script>
 </body>
 </html>
+
 
 
 
