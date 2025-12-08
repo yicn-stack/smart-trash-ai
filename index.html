@@ -241,8 +241,8 @@ const tipBox = document.getElementById('tip');
 let model;
 let currentStream = null;
 
-/* ✅ L2 模型輸出順序，要跟你訓練時 class_names 一樣 */
-const classNames = ["battery", "foodbox", "general", "glass", "metal", "paper", "plastic"];
+/*模型輸出順序*/
+const classNames = ['general', 'paper', 'plastic', 'metal', 'glass', 'foodbox', 'battery'];
 
 /* 將英文類別轉成中文名稱、UI 類型、提示對應 key */
 function mapLabelInfo(labelEn) {
@@ -409,6 +409,7 @@ snapBtn.addEventListener("click", async () => {
 </script>
 </body>
 </html>
+
 
 
 
