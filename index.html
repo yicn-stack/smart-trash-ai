@@ -309,9 +309,8 @@ async function loadCameraAndModel() {
   resultCard.innerText = "⏳ 模型載入中...";
 
   try {
-    model = await tf.loadLayersModel(
-  const modelURL = "https://pub-3ec94e6b58164b2e8f0137fc44c63dab.r2.dev/model.json"
-);
+    const modelURL = "https://pub-3ec94e6b58164b2e8f0137fc44c63dab.r2.dev/model.json";
+    model = await tf.loadLayersModel(modelURL);
 
     snapBtn.disabled = false;
     resultCard.className = "recycle";
@@ -322,6 +321,7 @@ async function loadCameraAndModel() {
     backToCover("❌ 模型載入失敗");
   }
 }
+
 
 
 const tips = {
@@ -401,6 +401,7 @@ snapBtn.addEventListener("click", async () => {
 </script>
 </body>
 </html>
+
 
 
 
