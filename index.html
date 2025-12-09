@@ -232,6 +232,7 @@ video {
 
 
 
+
 <script>
 const video = document.getElementById('video');
 const snapBtn = document.getElementById('snap');
@@ -304,8 +305,10 @@ function goHome() {
 
 async function loadCameraAndModel() {
   // 先開相機（你原本的程式碼照舊）
+let model;
 
-  // 顯示模型載入中
+async function loadCameraAndModel() {
+  // 顯示載入提示（你原本的 UI 可照舊）
   resultCard.style.display = "block";
   resultCard.className = "trash";
   resultCard.innerText = "⏳ 模型載入中...";
@@ -323,6 +326,7 @@ async function loadCameraAndModel() {
     backToCover("❌ 模型載入失敗");
   }
 }
+
 
 
 
@@ -403,6 +407,7 @@ snapBtn.addEventListener("click", async () => {
 </script>
 </body>
 </html>
+
 
 
 
