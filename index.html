@@ -311,7 +311,7 @@ async function loadCameraAndModel() {
   resultCard.innerText = "⏳ 模型載入中...";
 
   try {
-    const modelURL = "https://pub-3ec94e6b58164b2e8f0137fc44c63dab.r2.dev/model.json";
+    const modelURL = "https://pub-3ec94e6b58164b2e8f0137fc44c63dab.r2.dev/model/model.json";
     model = await tf.loadLayersModel(modelURL);
 
     snapBtn.disabled = false;
@@ -403,6 +403,7 @@ snapBtn.addEventListener("click", async () => {
 </script>
 </body>
 </html>
+
 
 
 
