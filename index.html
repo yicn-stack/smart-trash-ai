@@ -194,18 +194,11 @@ video {
 
 <!-- 封面 -->
 <div id="cover">
-  <!-- LOGO 照舊放在 model/LOGO.png -->
   <img src="model/LOGO.png" alt="LOGO">
-
-  <!-- 主按鈕：進入系統 -->
   <button class="cover-btn primary" onclick="enterSystem()">辨識系統</button>
-
-  <!-- 次按鈕：分類小知識 -->
   <button class="cover-btn secondary" onclick="location.href='knowledge.html'">
     分類小知識
   </button>
-
-  <!-- 次按鈕：垃圾減量 Tips -->
   <button class="cover-btn secondary" onclick="location.href='reduce.html'">
     垃圾減量 Tips
   </button>
@@ -223,15 +216,11 @@ video {
   <div id="resultCard"></div>
   <div id="tip"></div>
 
-  <!-- 回首頁按鈕 -->
   <button id="backHome" onclick="goHome()">回首頁</button>
 </div>
 
-<!-- ✅ 只需要 TensorFlow.js，不再載入 Teachable Machine -->
+<!-- TensorFlow.js -->
 <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.22.0/dist/tf.min.js"></script>
-
-
-
 
 <script>
 const video = document.getElementById('video');
@@ -244,25 +233,25 @@ const tipBox = document.getElementById('tip');
 let model;
 let currentStream = null;
 
-/*模型輸出順序*/
+/* 模型輸出順序，必須和訓練時 CLASS_NAMES 一樣 */
 const classNames = ["battery", "foodbox", "general", "glass", "metal", "paper", "plastic"];
 
 /* 將英文類別轉成中文名稱、UI 類型、提示對應 key */
 function mapLabelInfo(labelEn) {
   switch (labelEn) {
-      case "general":
+    case "general":
       return { display: "一般垃圾", type: "trash", tipKey: "一般垃圾" };
-       case "paper":
+    case "paper":
       return { display: "紙類", type: "recycle", tipKey: "紙類" };
     case "plastic":
       return { display: "塑膠類", type: "recycle", tipKey: "塑膠類" };
-       case "metal":
+    case "metal":
       return { display: "金屬類", type: "recycle", tipKey: "金屬類" };
     case "glass":
       return { display: "玻璃類", type: "recycle", tipKey: "玻璃類" };
     case "foodbox":
       return { display: "紙餐具", type: "trash", tipKey: "紙餐具" };
-        case "battery":
+    case "battery":
       return { display: "有害垃圾", type: "hazard", tipKey: "有害垃圾" };
     default:
       return { display: labelEn, type: "trash", tipKey: "" };
@@ -303,12 +292,22 @@ function goHome() {
   cover.style.animation = "fadeIn 0.6s ease";
 }
 
+/* 開相機 + 載入模型 */
 async function loadCameraAndModel() {
-  // 先開相機（你原本的程式碼照舊）
-let model;
+  // 先開相機
+  try {
+    currentStream = await navigator.mediaDevices.getUserMedia({
+      video: { facingMode: "environment" },
+      audio: false
+    });
+    video.srcObject = currentStream;
+  } catch (err) {
+    console.error("相機啟動失敗：", err);
+    backToCover("相機啟動失敗");
+    return;
+  }
 
-async function loadCameraAndModel() {
-  // 顯示載入提示（你原本的 UI 可照舊）
+  // 顯示模型載入中
   resultCard.style.display = "block";
   resultCard.className = "trash";
   resultCard.innerText = "⏳ 模型載入中...";
@@ -326,9 +325,6 @@ async function loadCameraAndModel() {
     backToCover("❌ 模型載入失敗");
   }
 }
-
-
-
 
 const tips = {
   "塑膠類": "💡 如果容器內有液體記得先倒掉喔！",
@@ -360,7 +356,6 @@ snapBtn.addEventListener("click", async () => {
     const prediction = model.predict(tensor);
     const data = await prediction.data();
 
-    // 用完釋放記憶體
     tensor.dispose();
     prediction.dispose();
 
@@ -378,7 +373,6 @@ snapBtn.addEventListener("click", async () => {
     const info = mapLabelInfo(labelEn);
     const probText = (maxProb * 100).toFixed(2) + "%";
 
-    // 設定 UI 樣式與 icon
     let cssClass = "trash";
     let icon = "🗑️";
     if (info.type === "recycle") {
@@ -407,25 +401,3 @@ snapBtn.addEventListener("click", async () => {
 </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
