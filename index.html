@@ -219,8 +219,8 @@ video {
   <button id="backHome" onclick="goHome()">回首頁</button>
 </div>
 
-<!-- TensorFlow.js -->
-<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.10.0/dist/tf.min.js"></script>
+<!-- TensorFlow.js（建議使用最新版 4.x） -->
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.22.0/dist/tf.min.js"></script>
 
 <script>
 const video = document.getElementById('video');
@@ -230,31 +230,37 @@ const main = document.getElementById('main');
 const resultCard = document.getElementById('resultCard');
 const tipBox = document.getElementById('tip');
 
-let model;
+// 例：你的 R2 公開網址長得像這樣，就照自己的改
+const MODEL_URL  = "https://pub-3ec94e6b58164b2e8f0137fc44c63dab.r2.dev/model.json";
+const LABELS_URL = "https://pub-3ec94e6b58164b2e8f0137fc44c63dab.r2.dev/labels.json";
+
+
+let model = null;
+let labels = [];       // 由 labels.json 載入
 let currentStream = null;
 
-/* 模型輸出順序，必須和訓練時 CLASS_NAMES 一樣 */
-const classNames = ["battery", "foodbox", "general", "glass", "metal", "paper", "plastic"];
-
-/* 將英文類別轉成中文名稱、UI 類型、提示對應 key */
-function mapLabelInfo(labelEn) {
-  switch (labelEn) {
-    case "general":
-      return { display: "一般垃圾", type: "trash", tipKey: "一般垃圾" };
-    case "paper":
-      return { display: "紙類", type: "recycle", tipKey: "紙類" };
-    case "plastic":
-      return { display: "塑膠類", type: "recycle", tipKey: "塑膠類" };
-    case "metal":
-      return { display: "金屬類", type: "recycle", tipKey: "金屬類" };
-    case "glass":
-      return { display: "玻璃類", type: "recycle", tipKey: "玻璃類" };
-    case "foodbox":
-      return { display: "紙餐具", type: "trash", tipKey: "紙餐具" };
-    case "battery":
-      return { display: "有害垃圾", type: "hazard", tipKey: "有害垃圾" };
+/* 依「中文類別名稱」對應 UI 類型與提示 key
+   labels.json 裡建議是：
+   ["一般垃圾","紙類","塑膠","金屬","玻璃","紙餐具","有害垃圾"]
+*/
+function mapLabelInfo(labelZh) {
+  switch (labelZh) {
+    case "一般垃圾":
+      return { display: "一般垃圾", type: "trash",  tipKey: "一般垃圾" };
+    case "紙類":
+      return { display: "紙類",     type: "recycle", tipKey: "紙類" };
+    case "塑膠":
+      return { display: "塑膠類",   type: "recycle", tipKey: "塑膠類" };
+    case "金屬":
+      return { display: "金屬類",   type: "recycle", tipKey: "金屬類" };
+    case "玻璃":
+      return { display: "玻璃類",   type: "recycle", tipKey: "玻璃類" };
+    case "紙餐具":
+      return { display: "紙餐具",   type: "trash",   tipKey: "紙餐具" };
+    case "有害垃圾":
+      return { display: "有害垃圾", type: "hazard",  tipKey: "有害垃圾" };
     default:
-      return { display: labelEn, type: "trash", tipKey: "" };
+      return { display: labelZh || "未知類別", type: "trash", tipKey: "" };
   }
 }
 
@@ -272,7 +278,7 @@ function backToCover(message) {
   stopCamera();
   main.style.display = "none";
   cover.style.display = "flex";
-  alert(message + "\n請允許相機後再重新點選『進入系統』。");
+  alert(message + "\n請允許相機後再重新點選『辨識系統』。");
   setTimeout(() => location.reload(), 600);
 }
 
@@ -310,25 +316,36 @@ async function loadCameraAndModel() {
   // 顯示模型載入中
   resultCard.style.display = "block";
   resultCard.className = "trash";
-  resultCard.innerText = "⏳ 模型載入中...";
+  resultCard.innerText = "⏳ 模型載入中…";
 
   try {
-    const modelURL = "https://pub-3ec94e6b58164b2e8f0137fc44c63dab.r2.dev/model.json";
-    model = await tf.loadLayersModel(modelURL);
+    // 1. 載入 TFJS 模型
+    model = await tf.loadLayersModel(MODEL_URL);
+
+    // 2. 載入類別名稱（labels.json）
+    try {
+      const res = await fetch(LABELS_URL);
+      labels = await res.json();
+      console.log("labels.json 內容：", labels);
+    } catch (e) {
+      console.warn("labels.json 載入失敗，將使用索引顯示類別：", e);
+      labels = [];
+    }
 
     snapBtn.disabled = false;
     resultCard.className = "recycle";
     resultCard.innerText = "✅ 模型載入完成，可以開始拍照分類！";
     console.log("模型載入完成");
   } catch (err) {
-    console.error("模型失敗：", err);
+    console.error("模型載入失敗：", err);
     backToCover("❌ 模型載入失敗");
   }
 }
 
+/* 小提示內容 */
 const tips = {
   "塑膠類": "💡 如果容器內有液體記得先倒掉喔！",
-  "紙類": "🧻 紙張保持乾燥，避免油污與塑膠膜。",
+  "紙類":   "🧻 紙張保持乾燥，避免油污與塑膠膜。",
   "金屬類": "🔧 鐵鋁罐壓扁後再回收，可節省空間。",
   "玻璃類": "🍾 破損玻璃請用紙包好再投入。",
   "紙餐具": "🍽️ 若紙餐具沾油污，請丟一般垃圾。",
@@ -336,6 +353,7 @@ const tips = {
   "有害垃圾": "☠️ 電池、燈管等需特別回收處理。"
 };
 
+/* 拍照並送入模型預測 */
 snapBtn.addEventListener("click", async () => {
   const canvas = document.createElement("canvas");
   canvas.width = video.videoWidth;
@@ -369,8 +387,8 @@ snapBtn.addEventListener("click", async () => {
       }
     }
 
-    const labelEn = classNames[maxIndex];
-    const info = mapLabelInfo(labelEn);
+    const labelZh = labels[maxIndex] || `類別 ${maxIndex}`;
+    const info = mapLabelInfo(labelZh);
     const probText = (maxProb * 100).toFixed(2) + "%";
 
     let cssClass = "trash";
@@ -395,10 +413,10 @@ snapBtn.addEventListener("click", async () => {
   } catch (err) {
     console.error("辨識錯誤：", err);
     resultCard.className = "hazard";
+    resultCard.style.display = "block";
     resultCard.innerText = "⚠️ 分類錯誤：" + err.message;
   }
 });
 </script>
 </body>
 </html>
-
