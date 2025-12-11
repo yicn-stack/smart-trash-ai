@@ -368,7 +368,6 @@ snapBtn.addEventListener("click", async () => {
     let tensor = tf.browser.fromPixels(canvas)
       .resizeBilinear([imgSize, imgSize])
       .toFloat()
-      .div(255.0)
       .expandDims(0); // [1,224,224,3]
 
     const prediction = model.predict(tensor);
@@ -420,4 +419,5 @@ snapBtn.addEventListener("click", async () => {
 </script>
 </body>
 </html>
+
 
