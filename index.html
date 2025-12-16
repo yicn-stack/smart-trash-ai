@@ -151,6 +151,13 @@ video {
 .recycle { border-left: 8px solid #66bb6a; }
 .trash   { border-left: 8px solid #9e9e9e; }
 .hazard  { border-left: 8px solid #e57373; }
+  /* 【新增】七類垃圾專屬顏色 */
+.paper   { border-left: 8px solid #42a5f5; } /* 紙類 */
+.plastic { border-left: 8px solid #1e88e5; } /* 塑膠 */
+.metal   { border-left: 8px solid #b0bec5; } /* 金屬 */
+.glass   { border-left: 8px solid #26a69a; } /* 玻璃 */
+.foodbox { border-left: 8px solid #8d6e63; } /* 紙餐具 */
+
 
 /* 小提示卡 */
 #tip {
@@ -246,21 +253,21 @@ let currentStream = null;
 function mapLabelInfo(labelZh) {
   switch (labelZh) {
     case "一般垃圾":
-      return { display: "一般垃圾", type: "trash",  tipKey: "一般垃圾" };
+      return { display: "一般垃圾", css: "trash", icon: "🗑️", tipKey: "一般垃圾" };
     case "紙類":
-      return { display: "紙類",     type: "recycle", tipKey: "紙類" };
+      return { display: "紙類", css: "paper", icon: "📄", tipKey: "紙類" };
     case "塑膠":
-      return { display: "塑膠類",   type: "recycle", tipKey: "塑膠類" };
+      return { display: "塑膠", css: "plastic", icon: "🧴", tipKey: "塑膠類" };
     case "金屬":
-      return { display: "金屬類",   type: "recycle", tipKey: "金屬類" };
+      return { display: "金屬", css: "metal", icon: "🥫", tipKey: "金屬類" };
     case "玻璃":
-      return { display: "玻璃類",   type: "recycle", tipKey: "玻璃類" };
+      return { display: "玻璃", css: "glass", icon: "🍾", tipKey: "玻璃類" };
     case "紙餐具":
-      return { display: "紙餐具",   type: "trash",   tipKey: "紙餐具" };
+      return { display: "紙餐具", css: "foodbox", icon: "🍱", tipKey: "紙餐具" };
     case "有害垃圾":
-      return { display: "有害垃圾", type: "hazard",  tipKey: "有害垃圾" };
+      return { display: "有害垃圾", css: "hazard", icon: "☠️", tipKey: "有害垃圾" };
     default:
-      return { display: labelZh || "未知類別", type: "trash", tipKey: "" };
+      return { display: labelZh || "未知類別", css: "trash", icon: "❓", tipKey: "" };
   }
 }
 
@@ -390,15 +397,9 @@ snapBtn.addEventListener("click", async () => {
     const info = mapLabelInfo(labelZh);
     const probText = (maxProb * 100).toFixed(2) + "%";
 
-    let cssClass = "trash";
-    let icon = "🗑️";
-    if (info.type === "recycle") {
-      cssClass = "recycle";
-      icon = "♻️";
-    } else if (info.type === "hazard") {
-      cssClass = "hazard";
-      icon = "☠️";
-    }
+    const cssClass = info.css;
+const icon = info.icon;
+
 
     resultCard.className = cssClass;
     resultCard.style.display = "block";
@@ -419,5 +420,6 @@ snapBtn.addEventListener("click", async () => {
 </script>
 </body>
 </html>
+
 
 
