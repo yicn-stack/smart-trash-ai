@@ -373,10 +373,11 @@ snapBtn.addEventListener("click", async () => {
 
   try {
     const imgSize = 224; // 要跟訓練時一致
-    let tensor = tf.browser.fromPixels(canvas)
-      .resizeBilinear([imgSize, imgSize])
-      .toFloat()
-      .expandDims(0); // [1,224,224,3]
+let tensor = tf.browser.fromPixels(canvas)
+  .resizeBilinear([224, 224])
+  .toFloat()
+  .div(255.0)   // ⭐ 這行取代 Rescaling
+  .expandDims(0);
 
     const prediction = model.predict(tensor);
     const data = await prediction.data();
@@ -421,6 +422,7 @@ const icon = info.icon;
 </script>
 </body>
 </html>
+
 
 
 
