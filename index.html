@@ -376,7 +376,6 @@ snapBtn.addEventListener("click", async () => {
 let tensor = tf.browser.fromPixels(canvas)
   .resizeBilinear([224, 224])
   .toFloat()
-  .div(255.0)   // ⭐ 這行取代 Rescaling
   .expandDims(0);
 
     const prediction = model.predict(tensor);
@@ -422,6 +421,7 @@ const icon = info.icon;
 </script>
 </body>
 </html>
+
 
 
 
