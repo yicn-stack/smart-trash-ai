@@ -81,6 +81,8 @@ body {
   transform: translateY(-3px);
 }
 
+
+
 /* 主畫面 */
 #main {
   width: 100%;
@@ -151,12 +153,6 @@ video {
 .recycle { border-left: 8px solid #66bb6a; }
 .trash   { border-left: 8px solid #9e9e9e; }
 .hazard  { border-left: 8px solid #e57373; }
-  /* 【新增】七類垃圾專屬顏色 */
-.paper   { border-left: 8px solid #42a5f5; } /* 紙類 */
-.plastic { border-left: 8px solid #1e88e5; } /* 塑膠 */
-.metal   { border-left: 8px solid #b0bec5; } /* 金屬 */
-.glass   { border-left: 8px solid #26a69a; } /* 玻璃 */
-.foodbox { border-left: 8px solid #8d6e63; } /* 紙餐具 */
 
 /* 小提示卡 */
 #tip {
@@ -201,14 +197,22 @@ video {
 <!-- 封面 -->
 <div id="cover">
   <img src="model/LOGO.png" alt="LOGO">
+
+  <!-- 主按鈕：進入系統 -->
   <button class="cover-btn primary" onclick="enterSystem()">辨識系統</button>
+
+  <!-- 次按鈕：分類小知識 -->
   <button class="cover-btn secondary" onclick="location.href='knowledge.html'">
     分類小知識
   </button>
+
+  <!-- 次按鈕：垃圾減量 Tips -->
   <button class="cover-btn secondary" onclick="location.href='reduce.html'">
     垃圾減量 Tips
   </button>
 </div>
+
+
 
 <!-- 主畫面 -->
 <div id="main">
@@ -222,11 +226,13 @@ video {
   <div id="resultCard"></div>
   <div id="tip"></div>
 
+  <!-- 回首頁按鈕 -->
   <button id="backHome" onclick="goHome()">回首頁</button>
 </div>
 
-<!-- TensorFlow.js（建議使用最新版 4.x） -->
-<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.22.0/dist/tf.min.js"></script>
+<!-- ML Library -->
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest"></script>
+<script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image/dist/teachablemachine-image.min.js"></script>
 
 <script>
 const video = document.getElementById('video');
@@ -236,41 +242,8 @@ const main = document.getElementById('main');
 const resultCard = document.getElementById('resultCard');
 const tipBox = document.getElementById('tip');
 
-// 例：你的 R2 公開網址長得像這樣，就照自己的改
-const MODEL_URL  = "https://pub-3ec94e6b58164b2e8f0137fc44c63dab.r2.dev/model.json";
-const LABELS_URL = "https://pub-3ec94e6b58164b2e8f0137fc44c63dab.r2.dev/labels.json";
-
-
-
-let model = null;
-let labels = [];       // 由 labels.json 載入
+let model;
 let currentStream = null;
-
-/* 依「中文類別名稱」對應 UI 類型與提示 key
-   labels.json 裡建議是：
-   ["一般垃圾","紙類","塑膠","金屬","玻璃","紙餐具","有害垃圾"]
-*/
-function mapLabelInfo(labelZh) {
-  switch (labelZh) {
-    case "一般垃圾":
-      return { display: "一般垃圾", css: "trash", icon: "🗑️", tipKey: "一般垃圾" };
-    case "紙類":
-      return { display: "紙類", css: "paper", icon: "📄", tipKey: "紙類" };
-    case "塑膠":
-      return { display: "塑膠", css: "plastic", icon: "🧴", tipKey: "塑膠類" };
-    case "金屬":
-      return { display: "金屬", css: "metal", icon: "🥫", tipKey: "金屬類" };
-    case "玻璃":
-      return { display: "玻璃", css: "glass", icon: "🍾", tipKey: "玻璃類" };
-    case "紙餐具":
-      return { display: "紙餐具", css: "foodbox", icon: "🍱", tipKey: "紙餐具" };
-    case "有害垃圾":
-      return { display: "有害垃圾", css: "hazard", icon: "☠️", tipKey: "有害垃圾" };
-    default:
-      return { display: labelZh || "未知類別", css: "trash", icon: "❓", tipKey: "" };
-  }
-}
-
 
 async function enterSystem() {
   stopCamera();
@@ -286,7 +259,7 @@ function backToCover(message) {
   stopCamera();
   main.style.display = "none";
   cover.style.display = "flex";
-  alert(message + "\n請允許相機後再重新點選『辨識系統』。");
+  alert(message + "\n請允許相機後再重新點選『進入系統』。");
   setTimeout(() => location.reload(), 600);
 }
 
@@ -306,62 +279,44 @@ function goHome() {
   cover.style.animation = "fadeIn 0.6s ease";
 }
 
-/* 開相機 + 載入模型 */
 async function loadCameraAndModel() {
-  // 先開相機
   try {
-    currentStream = await navigator.mediaDevices.getUserMedia({
-      video: { facingMode: "environment" },
-      audio: false
-    });
+    currentStream = await navigator.mediaDevices.getUserMedia({ video:{facingMode:"environment"} });
     video.srcObject = currentStream;
   } catch (err) {
-    console.error("相機啟動失敗：", err);
-    backToCover("相機啟動失敗");
+    console.error("相機失敗：", err);
+    backToCover("⚠️ 無法開啟相機或未允許相機權限");
     return;
   }
 
-  // 顯示模型載入中
   resultCard.style.display = "block";
   resultCard.className = "trash";
-  resultCard.innerText = "⏳ 模型載入中…";
+  resultCard.innerText = "⏳ 模型載入中...";
 
   try {
-    // 1. 載入 TFJS 模型
-    model = await tf.loadLayersModel(MODEL_URL);
-
-    // 2. 載入類別名稱（labels.json）
-    try {
-      const res = await fetch(LABELS_URL);
-      labels = await res.json();
-      console.log("labels.json 內容：", labels);
-    } catch (e) {
-      console.warn("labels.json 載入失敗，將使用索引顯示類別：", e);
-      labels = [];
-    }
+    const modelURL = "./model/model.json";
+    const metadataURL = "./model/metadata.json";
+    model = await window.tmImage.load(modelURL, metadataURL);
 
     snapBtn.disabled = false;
     resultCard.className = "recycle";
     resultCard.innerText = "✅ 模型載入完成，可以開始拍照分類！";
-    console.log("模型載入完成");
   } catch (err) {
-    console.error("模型載入失敗：", err);
+    console.error("模型失敗：", err);
     backToCover("❌ 模型載入失敗");
   }
 }
 
-/* 小提示內容 */
 const tips = {
-  "一般垃圾": "🚮 確認無其他可回收部分即可直接丟棄垃圾桶。",
-  "紙類":   "🧻 紙張保持乾燥，避免油污與塑膠膜。",
   "塑膠類": "💡 如果容器內有液體記得先倒掉喔！",
+  "紙類": "🧻 紙張保持乾燥，避免油污與塑膠膜。",
   "金屬類": "🔧 鐵鋁罐壓扁後再回收，可節省空間。",
   "玻璃類": "🍾 破損玻璃請用紙包好再投入。",
   "紙餐具": "🍽️ 若紙餐具沾油污，請丟一般垃圾。",
+  "一般垃圾": "🚮 確認無其他可回收部分即可直接丟棄垃圾桶。",
   "有害垃圾": "☠️ 電池、燈管等需特別回收處理。"
 };
 
-/* 拍照並送入模型預測 */
 snapBtn.addEventListener("click", async () => {
   const canvas = document.createElement("canvas");
   canvas.width = video.videoWidth;
@@ -372,55 +327,40 @@ snapBtn.addEventListener("click", async () => {
   tipBox.style.display = "none";
 
   try {
-    const imgSize = 224; // 要跟訓練時一致
-let tensor = tf.browser.fromPixels(canvas)
-  .resizeBilinear([224, 224])
-  .toFloat()
-  .expandDims(0);
+    const prediction = await model.predict(canvas);
+    let best = prediction[0];
+    prediction.forEach(p => { if (p.probability > best.probability) best = p; });
 
-    const prediction = model.predict(tensor);
-    const data = await prediction.data();
-
-    tensor.dispose();
-    prediction.dispose();
-
-    // 找出最大機率
-    let maxIndex = 0;
-    let maxProb = data[0];
-    for (let i = 1; i < data.length; i++) {
-      if (data[i] > maxProb) {
-        maxProb = data[i];
-        maxIndex = i;
-      }
+    let cssClass = "trash", icon = "🗑️";
+    if (best.className.includes("可回收") || best.className.includes("資源回收")) {
+      cssClass = "recycle"; icon = "♻️";
+    } else if (best.className.includes("有害")) {
+      cssClass = "hazard"; icon = "☠️";
     }
-
-    const labelZh = labels[maxIndex] || `類別 ${maxIndex}`;
-    const info = mapLabelInfo(labelZh);
-    const probText = (maxProb * 100).toFixed(2) + "%";
-
-    const cssClass = info.css;
-const icon = info.icon;
-
 
     resultCard.className = cssClass;
     resultCard.style.display = "block";
-    resultCard.innerHTML = `${icon}<br><b>${info.display}</b><br><small>${probText}</small>`;
+    resultCard.innerHTML = `${icon}<br><b>${best.className}</b><br><small>${(best.probability*100).toFixed(2)}%</small>`;
 
-    if (info.tipKey && tips[info.tipKey]) {
-      tipBox.innerText = tips[info.tipKey];
-      tipBox.style.display = "block";
+    for (let key in tips) {
+      if (best.className.includes(key)) {
+        tipBox.innerText = tips[key];
+        tipBox.style.display = "block";
+        break;
+      }
     }
 
   } catch (err) {
     console.error("辨識錯誤：", err);
     resultCard.className = "hazard";
-    resultCard.style.display = "block";
     resultCard.innerText = "⚠️ 分類錯誤：" + err.message;
   }
 });
 </script>
 </body>
 </html>
+
+
 
 
 
