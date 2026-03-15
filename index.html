@@ -12,7 +12,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-/* 系統風格*/
+/* 樣式*/
 * { box-sizing: border-box; }
 body {
   font-family: "Noto Sans TC", sans-serif;
@@ -60,7 +60,7 @@ body {
   border: none;
 }
 
-/* 主按鈕（綠色） */
+/* 主按鈕 */
 .cover-btn.primary {
   background: #66bb6a;
   color: white;
@@ -108,7 +108,7 @@ body {
   box-shadow: 0 3px 10px rgba(0,0,0,0.2);
 }
 
-/* 攝影機區 */
+/* 拍攝 */
 #cameraBox {
   margin-top: 80px;
   background: white;
@@ -121,7 +121,7 @@ video {
   width: 300px;
 }
 
-/* 拍照按鈕（圓形） */
+/* 拍照按鈕 */
 #snap {
   width: 80px;
   height: 80px;
@@ -290,13 +290,13 @@ async function loadCameraAndModel() {
     video.srcObject = currentStream;
   } catch (err) {
     console.error("相機失敗：", err);
-    backToCover("⚠️ 無法開啟相機或未允許相機權限");
+    backToCover("無法開啟相機或未允許相機權限");
     return;
   }
 
   resultCard.style.display = "block";
   resultCard.className = "trash";
-  resultCard.innerText = "⏳ 模型載入中...";
+  resultCard.innerText = "載入中...";
 
   try {
     const modelURL = "./model/model.json";
@@ -305,20 +305,20 @@ async function loadCameraAndModel() {
 
     snapBtn.disabled = false;
     resultCard.className = "recycle";
-    resultCard.innerText = "✅ 模型載入完成，可以開始拍照分類！";
+    resultCard.innerText = "可以開始拍照分類！";
   } catch (err) {
     console.error("模型失敗：", err);
-    backToCover("❌ 模型載入失敗");
+    backToCover("模型載入失敗");
   }
 }
 
 const tips = {
   "塑膠類": "💡 如果容器內有液體記得先倒掉喔！",
-  "紙類": "🧻 紙張保持乾燥，避免油污與塑膠膜。",
-  "金屬類": "🔧 鐵鋁罐壓扁後再回收，可節省空間。",
-  "玻璃類": "🍾 破損玻璃請用紙包好再投入。",
-  "紙餐具": "🍽️ 若紙餐具沾油污，請丟一般垃圾。",
-  "一般垃圾": "🚮 確認無其他可回收部分即可直接丟棄垃圾桶。",
+  "紙類": "💡 紙張保持乾燥，避免油污與塑膠膜。",
+  "金屬類": "💡 鐵鋁罐壓扁後再回收，可節省空間。",
+  "玻璃類": "💡 破損玻璃請用紙包好再投入。",
+  "紙餐具": "💡 若紙餐具沾油污，請丟一般垃圾。",
+  "一般垃圾": "💡 確認無其他可回收部分即可直接丟棄垃圾桶。",
   "有害垃圾": "☠️ 電池、燈管等需特別回收處理。"
 };
 
@@ -358,7 +358,7 @@ snapBtn.addEventListener("click", async () => {
   } catch (err) {
     console.error("辨識錯誤：", err);
     resultCard.className = "hazard";
-    resultCard.innerText = "⚠️ 分類錯誤：" + err.message;
+    resultCard.innerText = " 分類錯誤：" + err.message;
   }
 });
 </script>
