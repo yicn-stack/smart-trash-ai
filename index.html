@@ -33,6 +33,107 @@ linear-gradient(180deg,#e8f5e9,#f1f8e9,#ffffff);
 
 }
 
+  /* 首頁標題 */
+
+.hero{
+text-align:center;
+margin-bottom:10px;
+}
+
+.hero h1{
+
+font-size:2.5rem;
+
+margin:0;
+
+color:#2e7d32;
+
+letter-spacing:1px;
+
+font-weight:800;
+
+}
+
+.hero p{
+
+margin-top:6px;
+
+font-size:1rem;
+
+color:#4caf50;
+
+}
+
+
+/* 按鈕區玻璃卡片 */
+
+.menuBox{
+
+margin-top:15px;
+
+padding:24px;
+
+background:rgba(255,255,255,0.7);
+
+border-radius:22px;
+
+backdrop-filter:blur(8px);
+
+box-shadow:
+
+0 15px 35px rgba(0,0,0,0.15);
+
+}
+
+
+/* 漂浮背景圖示 */
+
+#cover::before{
+
+content:"♻️";
+
+position:absolute;
+
+font-size:140px;
+
+opacity:0.06;
+
+top:12%;
+left:8%;
+
+animation:floatIcon 8s infinite ease-in-out;
+
+}
+
+#cover::after{
+
+content:"🌏";
+
+position:absolute;
+
+font-size:160px;
+
+opacity:0.05;
+
+bottom:10%;
+right:10%;
+
+animation:floatIcon 10s infinite ease-in-out;
+
+}
+
+
+/* 漂浮動畫 */
+
+@keyframes floatIcon{
+
+0%{transform:translateY(0)}
+
+50%{transform:translateY(-25px)}
+
+100%{transform:translateY(0)}
+
+}
 
 /* 封面 */
 
@@ -60,14 +161,25 @@ animation:fadeIn 1s ease;
 
 #cover img{
 
-width:260px;
+width:240px;
 
-margin-bottom:30px;
+margin:15px 0 20px;
 
 filter:
-drop-shadow(0 10px 20px rgba(0,0,0,0.25));
 
-animation:float 3s ease-in-out infinite;
+drop-shadow(0 12px 25px rgba(0,0,0,0.25));
+
+animation:logoFloat 3s ease-in-out infinite;
+
+}
+
+@keyframes logoFloat{
+
+0%{transform:translateY(0)}
+
+50%{transform:translateY(-10px)}
+
+100%{transform:translateY(0)}
 
 }
 
@@ -449,26 +561,36 @@ to{opacity:1}
 
 <div id="cover">
 
-<img src="model/LOGO.png">
+  <div class="hero">
 
-<button class="cover-btn primary" onclick="enterSystem()">
-辨識系統
-</button>
+    <h1>Smart Trash AI</h1>
+    <p>智慧垃圾分類影像辨識系統</p>
 
-<button class="cover-btn secondary"
-onclick="location.href='knowledge.html'">
-分類小知識
-</button>
+  </div>
 
-<button class="cover-btn secondary"
-onclick="location.href='reduce.html'">
-垃圾減量 Tips
-</button>
+  <img src="model/LOGO.png" alt="LOGO">
 
-<button class="cover-btn secondary"
-onclick="location.href='https://new.playreal.city?openExternalBrowser=1&serialNumber=AMQKJAPXEOBB'">
-小遊戲
-</button>
+
+  <div class="menuBox">
+
+    <button class="cover-btn primary" onclick="enterSystem()">
+      🤖 AI開始辨識
+    </button>
+
+    <button class="cover-btn secondary" onclick="location.href='knowledge.html'">
+      📚 分類小知識
+    </button>
+
+    <button class="cover-btn secondary" onclick="location.href='reduce.html'">
+      🌱 垃圾減量 Tips
+    </button>
+
+    <button class="cover-btn secondary"
+      onclick="location.href='https://new.playreal.city?openExternalBrowser=1&serialNumber=AMQKJAPXEOBB'">
+      🎮 分類小遊戲
+    </button>
+
+  </div>
 
 </div>
 
