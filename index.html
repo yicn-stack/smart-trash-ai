@@ -10,12 +10,15 @@
 <style>
 
 /* 全域 */
+
 *{
 box-sizing:border-box;
 }
 
 body{
+
 font-family:"Noto Sans TC",sans-serif;
+
 margin:0;
 padding:0;
 
@@ -27,6 +30,7 @@ min-height:100vh;
 
 background:
 linear-gradient(180deg,#e8f5e9,#f1f8e9,#ffffff);
+
 }
 
 
@@ -48,6 +52,7 @@ linear-gradient(135deg,#d0f8ce,#c8e6c9);
 z-index:3;
 
 animation:fadeIn 1s ease;
+
 }
 
 
@@ -93,10 +98,9 @@ box-shadow:
 
 }
 
-
 .cover-btn:hover{
 
-transform:translateY(-4px) scale(1.03);
+transform:translateY(-4px) scale(1.04);
 
 }
 
@@ -108,12 +112,6 @@ transform:translateY(-4px) scale(1.03);
 background:#66bb6a;
 
 color:white;
-
-}
-
-.cover-btn.primary:hover{
-
-background:#57a65c;
 
 }
 
@@ -130,25 +128,17 @@ border:3px solid #66bb6a;
 
 }
 
-.cover-btn.secondary:hover{
-
-background:#f1f8f1;
-
-}
-
 
 /* 主畫面 */
 
 #main{
 
 width:100%;
-
 max-width:480px;
 
 display:none;
 
 flex-direction:column;
-
 align-items:center;
 
 text-align:center;
@@ -174,7 +164,6 @@ font-weight:bold;
 padding:16px 0;
 
 position:fixed;
-
 top:0;
 
 z-index:5;
@@ -185,7 +174,7 @@ box-shadow:
 }
 
 
-/* 相機卡片 */
+/* 相機區 */
 
 #cameraBox{
 
@@ -199,6 +188,44 @@ border-radius:20px;
 
 box-shadow:
 0 8px 20px rgba(0,0,0,0.15);
+
+position:relative;
+
+overflow:hidden;
+
+}
+
+
+/* AI掃描線 */
+
+#cameraBox::after{
+
+content:"";
+
+position:absolute;
+
+left:0;
+
+width:100%;
+height:4px;
+
+background:
+linear-gradient(90deg,transparent,#66bb6a,transparent);
+
+animation:scan 3s infinite;
+
+}
+
+
+/* 掃描動畫 */
+
+@keyframes scan{
+
+0%{top:0}
+
+50%{top:100%}
+
+100%{top:0}
 
 }
 
@@ -241,10 +268,9 @@ transition:0.2s;
 
 }
 
-
 #snap:hover{
 
-transform:scale(1.05);
+transform:scale(1.08);
 
 }
 
@@ -255,7 +281,7 @@ transform:scale(0.9);
 }
 
 
-/* AI結果 */
+/* AI結果卡 */
 
 #resultCard{
 
@@ -278,6 +304,29 @@ box-shadow:
 0 6px 16px rgba(0,0,0,0.15);
 
 display:none;
+
+animation:resultPop 0.5s ease;
+
+}
+
+
+/* 跳出動畫 */
+
+@keyframes resultPop{
+
+0%{
+
+transform:scale(0.8);
+opacity:0;
+
+}
+
+100%{
+
+transform:scale(1);
+opacity:1;
+
+}
 
 }
 
@@ -328,6 +377,8 @@ line-height:1.5;
 
 display:none;
 
+animation:fadeIn 0.6s ease;
+
 }
 
 
@@ -360,7 +411,6 @@ transition:0.2s;
 
 }
 
-
 #backHome:hover{
 
 background:#81c784;
@@ -374,9 +424,9 @@ transform:translateY(-2px);
 
 @keyframes fadeIn{
 
-from{opacity:0;}
+from{opacity:0}
 
-to{opacity:1;}
+to{opacity:1}
 
 }
 
@@ -387,8 +437,6 @@ to{opacity:1;}
 50%{transform:translateY(-8px)}
 
 }
-
-</style>
 </head>
 
 <body>
