@@ -2,552 +2,206 @@
 <html lang="zh-TW">
 <head>
 <meta charset="UTF-8">
-
 <title>智慧垃圾分類系統｜Smart Trash AI</title>
 
+<meta name="description" content="智慧垃圾分類系統：透過 AI 影像辨識協助判斷紙類、塑膠、金屬、玻璃、紙餐具與一般垃圾。">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;600;700&display=swap" rel="stylesheet">
 
 <style>
 
-/* 全域 */
-
 *{
 box-sizing:border-box;
+margin:0;
+padding:0;
 }
 
 body{
-
 font-family:"Noto Sans TC",sans-serif;
-
-margin:0;
-padding:0;
-
+background:linear-gradient(180deg,#e8f5e9,#c8e6c9);
+min-height:100vh;
 display:flex;
 justify-content:center;
 align-items:flex-start;
-
-min-height:100vh;
-
-background:
-linear-gradient(180deg,#e8f5e9,#f1f8e9,#ffffff);
-
-}
-
-  /* 首頁標題 */
-
-.hero{
-text-align:center;
-margin-bottom:10px;
-}
-
-.hero h1{
-
-font-size:2.5rem;
-
-margin:0;
-
-color:#2e7d32;
-
-letter-spacing:1px;
-
-font-weight:800;
-
-}
-
-.hero p{
-
-margin-top:6px;
-
-font-size:1rem;
-
-color:#4caf50;
-
-}
-
-
-/* 按鈕區玻璃卡片 */
-
-.menuBox{
-
-margin-top:15px;
-
-padding:24px;
-
-background:rgba(255,255,255,0.7);
-
-border-radius:22px;
-
-backdrop-filter:blur(8px);
-
-box-shadow:
-
-0 15px 35px rgba(0,0,0,0.15);
-
-}
-
-
-/* 漂浮背景圖示 */
-
-#cover::before{
-
-content:"♻️";
-
-position:absolute;
-
-font-size:140px;
-
-opacity:0.06;
-
-top:12%;
-left:8%;
-
-animation:floatIcon 8s infinite ease-in-out;
-
-}
-
-#cover::after{
-
-content:"🌏";
-
-position:absolute;
-
-font-size:160px;
-
-opacity:0.05;
-
-bottom:10%;
-right:10%;
-
-animation:floatIcon 10s infinite ease-in-out;
-
-}
-
-
-/* 漂浮動畫 */
-
-@keyframes floatIcon{
-
-0%{transform:translateY(0)}
-
-50%{transform:translateY(-25px)}
-
-100%{transform:translateY(0)}
-
+padding:20px;
 }
 
 /* 封面 */
 
 #cover{
-
 position:absolute;
 inset:0;
-
 display:flex;
 flex-direction:column;
 justify-content:center;
 align-items:center;
-
-background:
-linear-gradient(135deg,#d0f8ce,#c8e6c9);
-
-z-index:3;
-
-animation:fadeIn 1s ease;
-
+background:linear-gradient(135deg,#d0f8ce,#c8e6c9);
+z-index:5;
 }
-
-
-/* LOGO */
 
 #cover img{
-
-width:240px;
-
-margin:15px 0 20px;
-
-filter:
-
-drop-shadow(0 12px 25px rgba(0,0,0,0.25));
-
-animation:logoFloat 3s ease-in-out infinite;
-
+width:220px;
+margin-bottom:15px;
+filter:drop-shadow(0 6px 10px rgba(0,0,0,0.2));
+animation:float 3s ease-in-out infinite;
 }
 
-@keyframes logoFloat{
-
-0%{transform:translateY(0)}
-
-50%{transform:translateY(-10px)}
-
-100%{transform:translateY(0)}
-
+.title{
+font-size:2rem;
+font-weight:700;
+color:#2e7d32;
+margin-bottom:4px;
 }
 
+.subtitle{
+color:#4caf50;
+margin-bottom:25px;
+}
 
 /* 按鈕 */
 
 .cover-btn{
-
-width:230px;
-
-padding:16px 0;
-
-margin-top:12px;
-
-font-size:1.2rem;
-font-weight:bold;
-
-border-radius:40px;
-
-cursor:pointer;
-
+width:240px;
+padding:15px 0;
+margin:8px 0;
+font-size:1.1rem;
+border-radius:30px;
 border:none;
-
-transition:0.25s;
-
-box-shadow:
-0 6px 14px rgba(0,0,0,0.18);
-
+cursor:pointer;
+transition:.25s;
+box-shadow:0 6px 14px rgba(0,0,0,.15);
 }
 
 .cover-btn:hover{
-
-transform:translateY(-4px) scale(1.04);
-
+transform:translateY(-3px);
 }
 
-
-/* 主按鈕 */
-
-.cover-btn.primary{
-
-background:#66bb6a;
-
+.primary{
+background:linear-gradient(135deg,#66bb6a,#43a047);
 color:white;
-
 }
 
-
-/* 次按鈕 */
-
-.cover-btn.secondary{
-
+.secondary{
 background:white;
-
 color:#388e3c;
-
-border:3px solid #66bb6a;
-
+border:2px solid #66bb6a;
 }
-
 
 /* 主畫面 */
 
 #main{
-
 width:100%;
-max-width:480px;
-
+max-width:420px;
+background:white;
+border-radius:25px;
+box-shadow:0 10px 30px rgba(0,0,0,.2);
 display:none;
-
 flex-direction:column;
 align-items:center;
-
-text-align:center;
-
+overflow:hidden;
 }
 
-
-/* 頂部 */
+/* header */
 
 #header{
-
 width:100%;
-
-background:
-linear-gradient(90deg,#66bb6a,#81c784);
-
+background:#66bb6a;
 color:white;
-
-font-size:1.5rem;
-
-font-weight:bold;
-
-padding:16px 0;
-
-position:fixed;
-top:0;
-
-z-index:5;
-
-box-shadow:
-0 4px 12px rgba(0,0,0,0.2);
-
+text-align:center;
+font-size:1.4rem;
+font-weight:700;
+padding:14px 0;
 }
 
-
-/* 相機區 */
+/* 相機 */
 
 #cameraBox{
-
-margin-top:90px;
-
-background:white;
-
-padding:16px;
-
-border-radius:20px;
-
-box-shadow:
-0 8px 20px rgba(0,0,0,0.15);
-
-position:relative;
-
-overflow:hidden;
-
+margin-top:20px;
+background:#fafafa;
+padding:18px;
+border-radius:18px;
+box-shadow:0 5px 15px rgba(0,0,0,.15);
 }
-
-
-/* AI掃描線 */
-
-#cameraBox::after{
-
-content:"";
-
-position:absolute;
-
-left:0;
-
-width:100%;
-height:4px;
-
-background:
-linear-gradient(90deg,transparent,#66bb6a,transparent);
-
-animation:scan 3s infinite;
-
-}
-
-
-/* 掃描動畫 */
-
-@keyframes scan{
-
-0%{top:0}
-
-50%{top:100%}
-
-100%{top:0}
-
-}
-
 
 video{
-
-border-radius:16px;
-
-width:300px;
-
+width:280px;
+border-radius:12px;
 }
-
 
 /* 拍照按鈕 */
 
 #snap{
-
-width:85px;
-height:85px;
-
-background:
-linear-gradient(180deg,#81c784,#66bb6a);
-
+margin-top:12px;
+width:90px;
+height:90px;
 border-radius:50%;
-
-border:4px solid white;
-
-margin-top:14px;
-
-box-shadow:
-0 6px 14px rgba(0,0,0,0.25);
-
-font-size:1rem;
-
+background:#66bb6a;
+border:6px solid white;
 color:white;
-
+font-size:1.2rem;
 cursor:pointer;
-
-transition:0.2s;
-
-}
-
-#snap:hover{
-
-transform:scale(1.08);
-
+box-shadow:0 6px 16px rgba(0,0,0,.25);
 }
 
 #snap:active{
-
-transform:scale(0.9);
-
+transform:scale(.85);
 }
 
-
-/* AI結果卡 */
+/* 分類結果 */
 
 #resultCard{
-
-margin-top:20px;
-
+margin-top:18px;
 background:white;
-
-width:85%;
-max-width:300px;
-
 border-radius:16px;
-
 padding:16px;
-
-font-size:1.1rem;
-
-font-weight:bold;
-
-box-shadow:
-0 6px 16px rgba(0,0,0,0.15);
-
+width:85%;
+text-align:center;
+box-shadow:0 4px 12px rgba(0,0,0,.15);
 display:none;
-
-animation:resultPop 0.5s ease;
-
+font-weight:600;
 }
 
+.recycle{border-left:8px solid #66bb6a;}
+.trash{border-left:8px solid #9e9e9e;}
+.hazard{border-left:8px solid #e57373;}
 
-/* 跳出動畫 */
-
-@keyframes resultPop{
-
-0%{
-
-transform:scale(0.8);
-opacity:0;
-
-}
-
-100%{
-
-transform:scale(1);
-opacity:1;
-
-}
-
-}
-
-
-/* 分類顏色 */
-
-.recycle{
-
-border-left:8px solid #66bb6a;
-
-}
-
-.trash{
-
-border-left:8px solid #9e9e9e;
-
-}
-
-.hazard{
-
-border-left:8px solid #e57373;
-
-}
-
-
-/* 提示卡 */
+/* 小提示 */
 
 #tip{
-
 margin-top:10px;
-
 background:#f1f8e9;
-
-padding:12px 16px;
-
-border-radius:14px;
-
+border-left:6px solid #66bb6a;
+padding:12px;
+border-radius:12px;
 width:85%;
-max-width:300px;
-
-border-left:5px solid #81c784;
-
-color:#33691e;
-
-font-size:0.95rem;
-
-line-height:1.5;
-
 display:none;
-
-animation:fadeIn 0.6s ease;
-
+font-size:.9rem;
+color:#33691e;
 }
-
 
 /* 回首頁 */
 
 #backHome{
-
-margin-top:14px;
-
-background:#a5d6a7;
-
-color:#1b5e20;
-
+margin:16px 0 20px;
+background:#e8f5e9;
+color:#2e7d32;
+padding:10px 26px;
+border-radius:20px;
 border:none;
-
-padding:10px 24px;
-
-font-size:1rem;
-
-font-weight:bold;
-
-border-radius:22px;
-
+font-weight:600;
 cursor:pointer;
-
-box-shadow:
-0 3px 8px rgba(0,0,0,0.15);
-
-transition:0.2s;
-
 }
 
 #backHome:hover{
-
-background:#81c784;
-
-transform:translateY(-2px);
-
+background:#c8e6c9;
 }
-
 
 /* 動畫 */
 
-@keyframes fadeIn{
-
-from{opacity:0}
-
-to{opacity:1}
-
-}
-
 @keyframes float{
-
-0%,100%{transform:translateY(0)}
-
-50%{transform:translateY(-8px)}
-
+0%,100%{transform:translateY(0);}
+50%{transform:translateY(-8px);}
 }
 
 </style>
@@ -555,61 +209,42 @@ to{opacity:1}
 
 <body>
 
-<h1 style="display:none;">智慧垃圾分類系統 AI 垃圾辨識</h1>
-
 <!-- 封面 -->
 
 <div id="cover">
 
-  <div class="hero">
+<img src="model/LOGO.png">
 
-    <h1>Smart Trash AI</h1>
-    <p>智慧垃圾分類影像辨識系統</p>
+<div class="title">Smart Trash AI</div>
+<div class="subtitle">AI智慧垃圾分類系統</div>
 
-  </div>
+<button class="cover-btn primary" onclick="enterSystem()">辨識系統</button>
 
-  <img src="model/LOGO.png" alt="LOGO">
+<button class="cover-btn secondary" onclick="location.href='knowledge.html'">
+分類小知識
+</button>
 
+<button class="cover-btn secondary" onclick="location.href='reduce.html'">
+垃圾減量 Tips
+</button>
 
-  <div class="menuBox">
-
-    <button class="cover-btn primary" onclick="enterSystem()">
-      🤖 AI開始辨識
-    </button>
-
-    <button class="cover-btn secondary" onclick="location.href='knowledge.html'">
-      📚 分類小知識
-    </button>
-
-    <button class="cover-btn secondary" onclick="location.href='reduce.html'">
-      🌱 垃圾減量 Tips
-    </button>
-
-    <button class="cover-btn secondary"
-      onclick="location.href='https://new.playreal.city?openExternalBrowser=1&serialNumber=AMQKJAPXEOBB'">
-      🎮 分類小遊戲
-    </button>
-
-  </div>
+<button class="cover-btn secondary" onclick="location.href='https://new.playreal.city?openExternalBrowser=1&serialNumber=AMQKJAPXEOBB'">
+垃圾分類小遊戲
+</button>
 
 </div>
-
 
 <!-- 主畫面 -->
 
 <div id="main">
 
-<div id="header">
-🌏 智慧垃圾分類系統
-</div>
+<div id="header">🌏 智慧垃圾分類系統</div>
 
 <div id="cameraBox">
 
 <video id="video" autoplay playsinline muted></video>
 
-<button id="snap" disabled>
-拍照
-</button>
+<button id="snap" disabled>拍照</button>
 
 </div>
 
@@ -617,150 +252,140 @@ to{opacity:1}
 
 <div id="tip"></div>
 
-<button id="backHome" onclick="goHome()">
-回首頁
-</button>
+<button id="backHome" onclick="goHome()">回首頁</button>
 
 </div>
 
-
-<!-- ML Library -->
-
 <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest"></script>
-
 <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image/dist/teachablemachine-image.min.js"></script>
 
 <script>
-const video = document.getElementById('video');
-const snapBtn = document.getElementById('snap');
-const cover = document.getElementById('cover');
-const main = document.getElementById('main');
-const resultCard = document.getElementById('resultCard');
-const tipBox = document.getElementById('tip');
 
-let model;
-let currentStream = null;
+const video=document.getElementById('video')
+const snapBtn=document.getElementById('snap')
+const cover=document.getElementById('cover')
+const main=document.getElementById('main')
+const resultCard=document.getElementById('resultCard')
+const tipBox=document.getElementById('tip')
 
-async function enterSystem() {
-  stopCamera();
-  cover.style.animation = "fadeOut 1s ease forwards";
-  setTimeout(() => {
-    cover.style.display = "none";
-    main.style.display = "flex";
-    loadCameraAndModel();
-  }, 900);
+let model
+let currentStream=null
+
+async function enterSystem(){
+
+cover.style.display="none"
+main.style.display="flex"
+
+loadCameraAndModel()
+
 }
 
-function backToCover(message) {
-  stopCamera();
-  main.style.display = "none";
-  cover.style.display = "flex";
-  alert(message + "\n請允許相機後再重新點選『進入系統』。");
-  setTimeout(() => location.reload(), 600);
+function goHome(){
+
+stopCamera()
+
+main.style.display="none"
+cover.style.display="flex"
+
 }
 
-function stopCamera() {
-  if (currentStream) {
-    currentStream.getTracks().forEach(t => t.stop());
-    currentStream = null;
-  }
-  video.srcObject = null;
+function stopCamera(){
+
+if(currentStream){
+
+currentStream.getTracks().forEach(t=>t.stop())
+currentStream=null
+
 }
 
-/* 回首頁 */
-function goHome() {
-  stopCamera();
-  main.style.display = "none";
-  cover.style.display = "flex";
-  cover.style.animation = "fadeIn 0.6s ease";
 }
 
-async function loadCameraAndModel() {
-  try {
-    currentStream = await navigator.mediaDevices.getUserMedia({ video:{facingMode:"environment"} });
-    video.srcObject = currentStream;
-  } catch (err) {
-    console.error("相機失敗：", err);
-    backToCover("無法開啟相機或未允許相機權限");
-    return;
-  }
+async function loadCameraAndModel(){
 
-  resultCard.style.display = "block";
-  resultCard.className = "trash";
-  resultCard.innerText = "載入中...";
+try{
 
-  try {
-    const modelURL = "./model/model.json";
-    const metadataURL = "./model/metadata.json";
-    model = await window.tmImage.load(modelURL, metadataURL);
+currentStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:"environment"}})
 
-    snapBtn.disabled = false;
-    resultCard.className = "recycle";
-    resultCard.innerText = "可以開始拍照分類！";
-  } catch (err) {
-    console.error("模型失敗：", err);
-    backToCover("模型載入失敗");
-  }
+video.srcObject=currentStream
+
+}catch(err){
+
+alert("無法開啟相機")
+
+return
+
 }
 
-const tips = {
-  "塑膠類": "💡 如果容器內有液體記得先倒掉喔！",
-  "紙類": "💡 紙張保持乾燥，避免油污與塑膠膜。",
-  "金屬類": "💡 鐵鋁罐壓扁後再回收，可節省空間。",
-  "玻璃類": "💡 破損玻璃請用紙包好再投入。",
-  "紙餐具": "💡 若紙餐具沾油污，請丟一般垃圾。",
-  "一般垃圾": "💡 確認無其他可回收部分即可直接丟棄垃圾桶。",
-  "有害垃圾": "☠️ 電池、燈管等需特別回收處理。"
-};
+resultCard.style.display="block"
+resultCard.innerText="模型載入中..."
 
-snapBtn.addEventListener("click", async () => {
-  const canvas = document.createElement("canvas");
-  canvas.width = video.videoWidth;
-  canvas.height = video.videoHeight;
-  const ctx = canvas.getContext("2d");
-  ctx.drawImage(video, 0, 0);
+const modelURL="./model/model.json"
+const metadataURL="./model/metadata.json"
 
-  tipBox.style.display = "none";
+model=await window.tmImage.load(modelURL,metadataURL)
 
-  try {
-    const prediction = await model.predict(canvas);
-    let best = prediction[0];
-    prediction.forEach(p => { if (p.probability > best.probability) best = p; });
+snapBtn.disabled=false
+resultCard.innerText="可以開始辨識垃圾！"
 
-    let cssClass = "trash", icon = "🗑️";
-    if (best.className.includes("可回收") || best.className.includes("資源回收")) {
-      cssClass = "recycle"; icon = "♻️";
-    } else if (best.className.includes("有害")) {
-      cssClass = "hazard"; icon = "☠️";
-    }
+}
 
-    resultCard.className = cssClass;
-    resultCard.style.display = "block";
-    resultCard.innerHTML = `${icon}<br><b>${best.className}</b><br><small>${(best.probability*100).toFixed(2)}%</small>`;
+const tips={
+"塑膠類":"💡 容器記得先倒掉液體再回收！",
+"紙類":"💡 紙張保持乾燥，避免油污。",
+"金屬類":"💡 壓扁鋁罐可節省回收空間。",
+"玻璃類":"💡 破玻璃請包好避免割傷。",
+"紙餐具":"💡 若有油污請丟一般垃圾。",
+"一般垃圾":"💡 確認無可回收部分再丟棄。",
+"有害垃圾":"☠️ 電池燈管需特別回收。"
+}
 
-    for (let key in tips) {
-      if (best.className.includes(key)) {
-        tipBox.innerText = tips[key];
-        tipBox.style.display = "block";
-        break;
-      }
-    }
+snapBtn.addEventListener("click",async()=>{
 
-  } catch (err) {
-    console.error("辨識錯誤：", err);
-    resultCard.className = "hazard";
-    resultCard.innerText = " 分類錯誤：" + err.message;
-  }
-});
+const canvas=document.createElement("canvas")
+
+canvas.width=video.videoWidth
+canvas.height=video.videoHeight
+
+const ctx=canvas.getContext("2d")
+
+ctx.drawImage(video,0,0)
+
+const prediction=await model.predict(canvas)
+
+let best=prediction[0]
+
+prediction.forEach(p=>{
+if(p.probability>best.probability)best=p
+})
+
+let cssClass="trash"
+let icon="🗑️"
+
+if(best.className.includes("回收")){
+cssClass="recycle"
+icon="♻️"
+}else if(best.className.includes("有害")){
+cssClass="hazard"
+icon="☠️"
+}
+
+resultCard.className=cssClass
+resultCard.style.display="block"
+
+resultCard.innerHTML=`${icon}<br><b>${best.className}</b><br>${(best.probability*100).toFixed(2)}%`
+
+for(let key in tips){
+
+if(best.className.includes(key)){
+tipBox.innerText=tips[key]
+tipBox.style.display="block"
+}
+
+}
+
+})
+
 </script>
+
 </body>
 </html>
-
-
-
-
-
-
-
-
-
