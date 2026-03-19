@@ -12,7 +12,7 @@ body {
   background: linear-gradient(135deg, #e0f7fa, #e8f5e9);
 }
 
-/* 標題列 */
+/* 標題 */
 #header {
   width: 100%;
   background: #2e7d32;
@@ -21,44 +21,77 @@ body {
   padding: 18px 0;
   font-size: 1.8rem;
   font-weight: bold;
-  letter-spacing: 2px;
-  box-shadow: 0 3px 10px rgba(0,0,0,0.2);
 }
 
-/* 區塊容器 */
+/* 容器 */
 .container {
   max-width: 900px;
   margin: 20px auto;
   padding: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
-/* 卡片 */
-.card {
+/* 翻牌卡 */
+.flip-card {
+  width: 260px;
+  height: 340px;
+  margin: 15px;
+  perspective: 1000px;
+  cursor: pointer;
+}
+
+.flip-inner {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transition: transform 0.8s;
+  transform-style: preserve-3d;
+}
+
+.flip-inner.active {
+  transform: rotateY(180deg);
+}
+
+/* 正反面 */
+.flip-front, .flip-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 16px;
+  box-shadow: 0 5px 15px rgba(0,0,0,.2);
+  backface-visibility: hidden;
+}
+
+/* 正面 */
+.flip-front {
   background: white;
-  border-radius: 12px;
-  padding: 18px;
-  margin-bottom: 20px;
-  border-left: 8px solid #81c784;
-  box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-  transition: transform 0.3s ease;
-}
-.card:hover {
-  transform: translateY(-4px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: #2e7d32;
+  font-weight: bold;
+  text-align: center;
+  padding: 15px;
 }
 
-.card-title {
-  font-size: 1.4rem;
-  font-weight: bold;
-  color: #1b5e20;
+/* 背面 */
+.flip-back {
+  background: white;
+  transform: rotateY(180deg);
+  padding: 15px;
+  overflow-y: auto;
+}
+
+.flip-back img {
+  width: 100%;
+  border-radius: 10px;
   margin-bottom: 10px;
 }
 
-.card-text {
-  font-size: 1.05rem;
-  line-height: 1.6;
-}
-
-/* 返回按鈕 */
+/* 返回 */
 .back-btn {
   display: block;
   margin: 30px auto;
@@ -68,114 +101,118 @@ body {
   color: white;
   border-radius: 30px;
   text-decoration: none;
-  font-size: 1.2rem;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-  transition: background 0.3s ease;
-}
-.back-btn:hover {
-  background: #43a047;
 }
 </style>
 </head>
 
 <body>
 
-<div id="header">垃圾分類小知識</div>
+<div id="header">垃圾分類小知識（點擊卡片查看）</div>
 
 <div class="container">
 
-  <div class="card">
-    <div class="card-title">塑膠類（寶特瓶 / 塑膠容器）</div>
-    <img src="model/a1.png" width="1024">
-    <div class="card-text">
-      ✔ 回收前一定要倒掉飲料、沖洗乾淨、壓扁<br>
-      ✔ 寶特瓶瓶蓋可一起回收<br> 
-      ✔ 油膩塑膠盒需要清洗乾淨再丟棄<br>
-    </div>
-  </div>
-
-
-
+<!-- 塑膠 -->
 <div class="flip-card">
-
   <div class="flip-inner">
-
-    <!-- 正面 -->
     <div class="flip-front">
-      <h3>♻️ 塑膠類</h3>
-      <p>你知道塑膠回收的關鍵嗎？</p>
-      <p>👉 點擊查看</p>
+      ♻️ 塑膠類<br>
+      👉 點擊查看
     </div>
-
-    <!-- 背面（你的圖片） -->
     <div class="flip-back">
-      <img src="model/a1.png" width="1024">
+      <img src="model/a1.png">
+      ✔ 清洗乾淨<br>
+      ✔ 壓扁回收<br>
+      ✔ 油污需清洗
     </div>
-
   </div>
+</div>
+
+<!-- 紙類 -->
+<div class="flip-card">
+  <div class="flip-inner">
+    <div class="flip-front">
+      🧻 紙類<br>
+      👉 點擊查看
+    </div>
+    <div class="flip-back">
+      ✔ 保持乾燥<br>
+      ✔ 撕除膠帶<br>
+      ✔ 衛生紙不可回收
+    </div>
+  </div>
+</div>
+
+<!-- 金屬 -->
+<div class="flip-card">
+  <div class="flip-inner">
+    <div class="flip-front">
+      🥫 金屬類<br>
+      👉 點擊查看
+    </div>
+    <div class="flip-back">
+      ✔ 清洗乾淨<br>
+      ✔ 壓扁節省空間<br>
+      ✔ 分開丟棄
+    </div>
+  </div>
+</div>
+
+<!-- 玻璃 -->
+<div class="flip-card">
+  <div class="flip-inner">
+    <div class="flip-front">
+      🍾 玻璃類<br>
+      👉 點擊查看
+    </div>
+    <div class="flip-back">
+      ✔ 拿掉瓶蓋<br>
+      ✔ 破碎需包好<br>
+      ✔ 分類顏色
+    </div>
+  </div>
+</div>
+
+<!-- 紙餐具 -->
+<div class="flip-card">
+  <div class="flip-inner">
+    <div class="flip-front">
+      🍱 紙餐具<br>
+      👉 點擊查看
+    </div>
+    <div class="flip-back">
+      ✔ 無油可回收<br>
+      ✔ 油污需清洗<br>
+      ✔ 杯套可回收
+    </div>
+  </div>
+</div>
+
+<!-- 有害 -->
+<div class="flip-card">
+  <div class="flip-inner">
+    <div class="flip-front">
+      ☠️ 有害垃圾<br>
+      👉 點擊查看
+    </div>
+    <div class="flip-back">
+      ✔ 交回收箱<br>
+      ✔ 電池不可亂丟<br>
+      ✔ 打火機清空
+    </div>
+  </div>
+</div>
 
 </div>
 
-
-
-
-
-
-
-
-  
-  <div class="card">
-    <div class="card-title">紙類（紙箱 / 紙張 / 紙袋）</div>
-    <div class="card-text">
-      ✔ 紙張需保持乾淨、不可沾油<br> 
-      ✔ 塑膠膜、膠帶需撕掉<br> 
-      ✔ 衛生紙、面紙屬一般垃圾不可回收<br>
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="card-title">金屬類（鐵鋁罐）</div>
-    <div class="card-text">
-      ✔ 回收前請沖洗乾淨<br>
-      ✔ 鋁罐壓扁可節省空間<br>
-      ✔ 鐵鋁罐與容器需與一般垃圾分開<br> 
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="card-title">玻璃類（飲料玻璃瓶 / 醬料瓶）</div>
-    <div class="card-text">
-      ✔ 玻璃回收前請將瓶蓋取下<br>  
-      ✔ 破損玻璃請包好，避免割傷他人<br>  
-      ✔ 彩色玻璃與透明玻璃需分開<br>  
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="card-title">紙餐具（飲料杯 / 紙碗 / 紙盒）</div>
-    <div class="card-text">
-      ✔ 乾淨無油即可回收<br>
-      ✔ 若沾油污需要清洗過後再丟棄<br>
-      ✔ 杯套（硬紙板）可與紙類一起回收<br>
-    </div>
-  </div>
-
-
-  <div class="card">
-    <div class="card-title">有害垃圾（電池 / 燈管 / 打火機）</div>
-    <div class="card-text">
-      ✔ 一定要交給「有害垃圾回收箱」<br>  
-      ✔ 電池有汙染風險不能丟一般垃圾<br>
-      ✔ 打火機需確保無剩餘瓦斯<br>
-    </div>
-  </div>
-
-</div>
-
-<!-- 返回按鈕 -->
 <a href="index.html" class="back-btn">返回分類系統</a>
+
+<script>
+document.querySelectorAll(".flip-card").forEach(card=>{
+  card.addEventListener("click",()=>{
+    card.querySelector(".flip-inner").classList.toggle("active");
+  });
+});
+</script>
 
 </body>
 </html>
-
-
