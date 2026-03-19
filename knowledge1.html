@@ -6,7 +6,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-
 *{box-sizing:border-box;margin:0;padding:0;}
 
 body{
@@ -16,15 +15,12 @@ body{
 
 /* 標題 */
 #header{
-  width:100%;
   background:linear-gradient(135deg,#66bb6a,#43a047);
   color:white;
   text-align:center;
-  padding:20px 0;
+  padding:18px;
   font-size:1.6rem;
   font-weight:bold;
-  letter-spacing:1px;
-  box-shadow:0 4px 15px rgba(0,0,0,0.2);
 }
 
 /* 容器 */
@@ -37,21 +33,21 @@ body{
   gap:20px;
 }
 
-/* 翻牌卡 */
+/* 卡片變大 */
 .flip-card{
-  width:260px;
-  height:340px;
+  width:320px;
+  height:420px;
   perspective:1200px;
 }
 
+/* 翻牌 */
 .flip-inner{
   width:100%;
   height:100%;
   position:relative;
-  transition:transform .7s ease;
+  transition:transform .7s;
   transform-style:preserve-3d;
 }
-
 .flip-inner.active{
   transform:rotateY(180deg);
 }
@@ -67,22 +63,15 @@ body{
   overflow:hidden;
 }
 
-/* 正面（升級） */
+/* 正面 */
 .flip-front{
   background:linear-gradient(135deg,#a5d6a7,#66bb6a);
   color:white;
   display:flex;
-  flex-direction:column;
   justify-content:center;
   align-items:center;
-  font-size:1.2rem;
   text-align:center;
-  padding:20px;
-  transition:.3s;
-}
-
-.flip-card:hover .flip-front{
-  transform:scale(1.05);
+  font-size:1.2rem;
 }
 
 /* 背面 */
@@ -90,8 +79,7 @@ body{
   background:white;
   transform:rotateY(180deg);
   padding:15px;
-  font-size:.95rem;
-  line-height:1.6;
+  overflow-y:auto;
 }
 
 /* 圖片 */
@@ -99,35 +87,55 @@ body{
   width:100%;
   border-radius:12px;
   margin-bottom:10px;
+  cursor:pointer;
 }
 
-/* 返回按鈕 */
+/* 圖片提示 */
+.img-tip{
+  text-align:center;
+  font-size:0.8rem;
+  color:#888;
+  margin-bottom:8px;
+}
+
+/* 返回 */
 .back-btn{
   display:block;
   margin:40px auto;
   width:200px;
   text-align:center;
-  background:linear-gradient(135deg,#66bb6a,#43a047);
+  background:#43a047;
   padding:12px;
   color:white;
   border-radius:30px;
   text-decoration:none;
-  font-weight:bold;
-  box-shadow:0 6px 15px rgba(0,0,0,.2);
-  transition:.3s;
 }
 
-.back-btn:hover{
-  transform:translateY(-3px);
-  box-shadow:0 10px 20px rgba(0,0,0,.25);
+/* 放大彈窗 */
+#imgModal{
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background:rgba(0,0,0,0.85);
+  display:none;
+  justify-content:center;
+  align-items:center;
+  z-index:999;
 }
 
+#imgModal img{
+  width:90%;
+  max-width:700px;
+  border-radius:12px;
+}
 </style>
 </head>
 
 <body>
 
-<div id="header">🌏 垃圾分類小知識（點擊卡片）</div>
+<div id="header">🌏 垃圾分類小知識（點卡片 / 點圖片放大）</div>
 
 <div class="container">
 
@@ -135,16 +143,14 @@ body{
 <div class="flip-card">
   <div class="flip-inner">
     <div class="flip-front">
-      <h2>♻️ 塑膠類</h2><br><br>
-      <h4👉 點擊查看></h4>
+      ♻️ 塑膠類<br><br>👉 點擊查看
     </div>
     <div class="flip-back">
-      <img src="model/a1.png" width="800">
+      <div class="img-tip">🔍 點圖片可放大</div>
+      <img src="model/a1.png">
       ✔ 清洗乾淨<br>
       ✔ 壓扁回收<br>
-      ✔ 油污需清洗<br>
-      <br>
-      🌍 正確分類可減少污染
+      ✔ 油污需清洗
     </div>
   </div>
 </div>
@@ -153,8 +159,7 @@ body{
 <div class="flip-card">
   <div class="flip-inner">
     <div class="flip-front">
-      🧻 紙類<br><br>
-      👉 點擊查看
+      🧻 紙類<br><br>👉 點擊查看
     </div>
     <div class="flip-back">
       ✔ 保持乾燥<br>
@@ -164,75 +169,37 @@ body{
   </div>
 </div>
 
-<!-- 金屬 -->
-<div class="flip-card">
-  <div class="flip-inner">
-    <div class="flip-front">
-      🥫 金屬類<br><br>
-      👉 點擊查看
-    </div>
-    <div class="flip-back">
-      ✔ 清洗乾淨<br>
-      ✔ 壓扁節省空間<br>
-      ✔ 分開丟棄
-    </div>
-  </div>
-</div>
-
-<!-- 玻璃 -->
-<div class="flip-card">
-  <div class="flip-inner">
-    <div class="flip-front">
-      🍾 玻璃類<br><br>
-      👉 點擊查看
-    </div>
-    <div class="flip-back">
-      ✔ 拿掉瓶蓋<br>
-      ✔ 破碎需包好<br>
-      ✔ 分類顏色
-    </div>
-  </div>
-</div>
-
-<!-- 紙餐具 -->
-<div class="flip-card">
-  <div class="flip-inner">
-    <div class="flip-front">
-      🍱 紙餐具<br><br>
-      👉 點擊查看
-    </div>
-    <div class="flip-back">
-      ✔ 無油可回收<br>
-      ✔ 油污需清洗<br>
-      ✔ 杯套可回收
-    </div>
-  </div>
-</div>
-
-<!-- 有害 -->
-<div class="flip-card">
-  <div class="flip-inner">
-    <div class="flip-front">
-      ☠️ 有害垃圾<br><br>
-      👉 點擊查看
-    </div>
-    <div class="flip-back">
-      ✔ 交回收箱<br>
-      ✔ 電池不可亂丟<br>
-      ✔ 打火機清空
-    </div>
-  </div>
-</div>
-
 </div>
 
 <a href="index.html" class="back-btn">返回分類系統</a>
 
+<!-- 放大圖片 -->
+<div id="imgModal">
+  <img id="modalImg">
+</div>
+
 <script>
+// 翻牌
 document.querySelectorAll(".flip-card").forEach(card=>{
   card.addEventListener("click",()=>{
     card.querySelector(".flip-inner").classList.toggle("active");
   });
+});
+
+// 圖片放大
+const modal = document.getElementById("imgModal");
+const modalImg = document.getElementById("modalImg");
+
+document.querySelectorAll(".flip-back img").forEach(img=>{
+  img.addEventListener("click",(e)=>{
+    e.stopPropagation(); // 防止翻牌
+    modal.style.display="flex";
+    modalImg.src = img.src;
+  });
+});
+
+modal.addEventListener("click",()=>{
+  modal.style.display="none";
 });
 </script>
 
