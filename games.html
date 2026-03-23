@@ -3,48 +3,108 @@
 <head>
 <meta charset="UTF-8">
 <title>垃圾分類小遊戲</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
+
+*{box-sizing:border-box;margin:0;padding:0;}
+
 body{
   font-family:"Noto Sans TC";
-  background:#e8f5e9;
+  background:linear-gradient(180deg,#e8f5e9,#c8e6c9);
   display:flex;
   flex-direction:column;
   align-items:center;
-  padding-top:50px;
+  padding:30px 15px;
 }
 
-.card{
+/* 標題 */
+h2{
+  margin-bottom:20px;
+  color:#2e7d32;
+}
+
+/* 容器（左右排列） */
+.game-container{
+  display:flex;
+  gap:20px;
+  flex-wrap:wrap;
+  justify-content:center;
+  max-width:800px;
+}
+
+/* 遊戲卡片 */
+.game-card{
+  width:180px;
   background:white;
-  padding:20px;
   border-radius:20px;
-  box-shadow:0 5px 15px rgba(0,0,0,.2);
-  width:300px;
-  text-align:center;
+  overflow:hidden;
+  text-decoration:none;
+  color:black;
+  box-shadow:0 8px 20px rgba(0,0,0,.2);
+  transition:.3s;
 }
 
-.btn{
-  display:block;
-  margin:10px 0;
+.game-card:hover{
+  transform:translateY(-6px) scale(1.03);
+}
+
+/* 圖片 */
+.game-card img{
+  width:100%;
+  height:140px;
+  object-fit:cover;
+}
+
+/* 遊戲名稱 */
+.game-title{
   padding:12px;
-  border-radius:20px;
+  font-weight:bold;
+  text-align:center;
+  color:#2e7d32;
+}
+
+/* 回首頁 */
+.back-btn{
+  margin-top:30px;
   background:#66bb6a;
+  padding:12px 30px;
+  border-radius:25px;
   color:white;
   text-decoration:none;
+  font-weight:bold;
+  box-shadow:0 5px 12px rgba(0,0,0,.2);
+  transition:.3s;
 }
+
+.back-btn:hover{
+  transform:translateY(-3px);
+}
+
 </style>
 </head>
 
 <body>
 
-<div class="card">
 <h2>🎮 選擇遊戲</h2>
 
-<a class="btn" href="https://你的遊戲1連結">垃圾分類挑戰</a>
-<a class="btn" href="https://new.playreal.city?openExternalBrowser=1&serialNumber=AMQKJAPXEOBB">一個垃圾兩個世界</a>
+<div class="game-container">
 
-<a class="btn" href="index.html">回首頁</a>
+  <!-- 遊戲1 -->
+  <a class="game-card" href="https://你的遊戲1連結">
+    <img src="model/game1.png" alt="遊戲1">
+    <div class="game-title">垃圾分類挑戰</div>
+  </a>
+
+  <!-- 遊戲2 -->
+  <a class="game-card" href="https://new.playreal.city?openExternalBrowser=1&serialNumber=AMQKJAPXEOBB">
+    <img src="model/game2.png" alt="遊戲2">
+    <div class="game-title">一個垃圾兩個世界</div>
+  </a>
+
 </div>
+
+<a href="index.html" class="back-btn">回首頁</a>
 
 </body>
 </html>
