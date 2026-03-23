@@ -2,7 +2,7 @@
 <html lang="zh-TW">
 <head>
 <meta charset="UTF-8">
-<title>垃圾減量 Tips｜Smart Trash AI</title>
+<title>垃圾減量 Tips</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
@@ -22,35 +22,32 @@ body{
   background:#66bb6a;
   color:white;
   text-align:center;
+  padding:15px;
   font-size:1.5rem;
-  font-weight:bold;
-  padding:14px 0;
 }
 
 /* 容器 */
-#tipsContainer{
+.container{
   margin-top:20px;
-  width:95%;
-  max-width:900px;
   display:flex;
   flex-wrap:wrap;
-  justify-content:center;
   gap:20px;
+  justify-content:center;
 }
 
 /* 卡片 */
 .flip-card{
-  width:220px;
-  height:300px;
+  width:230px;
+  height:280px;
   perspective:1000px;
 }
 
 .flip-inner{
   width:100%;
   height:100%;
-  position:relative;
   transition:transform .6s;
   transform-style:preserve-3d;
+  position:relative;
 }
 
 .flip-inner.active{
@@ -65,71 +62,94 @@ body{
   border-radius:16px;
   backface-visibility:hidden;
   box-shadow:0 6px 15px rgba(0,0,0,.15);
-  overflow:hidden;
 }
 
-/* 正面（圖片＋標題） */
+/* 正面（文字） */
 .flip-front{
   background:white;
+  padding:15px;
   display:flex;
   flex-direction:column;
-}
-
-.flip-front img{
-  width:100%;
-  aspect-ratio:1/1;
-  object-fit:contain;
-  background:#f5f5f5;
-  padding:10px;
+  justify-content:center;
+  text-align:center;
 }
 
 .flip-front h3{
-  text-align:center;
-  padding:10px;
   color:#2e7d32;
+  margin-bottom:10px;
 }
 
-/* 背面（說明） */
+.flip-front p{
+  color:#555;
+  font-size:0.9rem;
+}
+
+/* 背面（圖片） */
 .flip-back{
-  background:#ffffff;
+  background:white;
   transform:rotateY(180deg);
-  padding:15px;
   display:flex;
   align-items:center;
-  text-align:center;
-  color:#33691e;
-  line-height:1.5;
+  justify-content:center;
+  padding:10px;
 }
 
-/* 返回 */
-#backHome{
-  margin:30px;
-  background:#66bb6a;
-  color:white;
-  border:none;
-  padding:12px 30px;
-  border-radius:25px;
-  font-size:1rem;
+.flip-back img{
+  width:100%;
+  aspect-ratio:1/1;
+  object-fit:contain;
   cursor:pointer;
 }
+
+/* 圖片放大 */
+#imgModal{
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background:rgba(0,0,0,0.85);
+  display:none;
+  justify-content:center;
+  align-items:center;
+}
+
+#imgModal img{
+  width:90%;
+  max-width:600px;
+  border-radius:10px;
+}
+
+/* 按鈕 */
+.btn{
+  margin:20px 10px;
+  padding:10px 25px;
+  border-radius:25px;
+  border:none;
+  cursor:pointer;
+}
+
+.back{background:#66bb6a;color:white;}
+.prev{background:white;color:#2e7d32;border:2px solid #66bb6a;}
+
 </style>
 </head>
 
 <body>
 
-<div id="header">🌱 垃圾減量小技巧（點擊卡片）</div>
+<div id="header">🌱 垃圾減量 Tips（點擊卡片）</div>
 
-<div id="tipsContainer">
+<div class="container">
 
 <!-- 卡片1 -->
 <div class="flip-card">
   <div class="flip-inner">
     <div class="flip-front">
-      <img src="model/餐具.png">
       <h3>自備餐具</h3>
+      <p>減少一次性餐具使用</p>
     </div>
     <div class="flip-back">
-     用餐時自備筷子、湯匙與餐盒，可大幅減少一次性餐具的使用。
+      <img src="model/tip1.png">
     </div>
   </div>
 </div>
@@ -138,78 +158,51 @@ body{
 <div class="flip-card">
   <div class="flip-inner">
     <div class="flip-front">
-      <img src="model/環保杯.png">
       <h3>自備飲料杯</h3>
+      <p>環保又省錢</p>
     </div>
     <div class="flip-back">
-     購買飲料可自備環保杯，多數飲料店還會提供折扣，環保又省錢！
-    </div>
-  </div>
-</div>
-
-<!-- 卡片3 -->
-<div class="flip-card">
-  <div class="flip-inner">
-    <div class="flip-front">
-      <img src="model/包裝.png">
-      <h3>減少過度包裝</h3>
-    </div>
-    <div class="flip-back">
-      選擇簡單包裝商品或自備購物袋，減少不必要的垃圾產生。
-    </div>
-  </div>
-</div>
-
-  <!-- 卡片4 -->
-<div class="flip-card">
-  <div class="flip-inner">
-    <div class="flip-front">
-      <img src="model/一次性.png">
-      <h3>避免使用一次性容器</h3>
-    </div>
-    <div class="flip-back">
-    常備可重複使用的餐盒、保鮮盒，外帶時也能拒絕一次性塑膠。
-    </div>
-  </div>
-</div>
-
-  <!-- 卡片5 -->
-<div class="flip-card">
-  <div class="flip-inner">
-    <div class="flip-front">
-      <img src="model/可補充.png">
-      <h3>選購可補充式商品</h3>
-    </div>
-    <div class="flip-back">
-     盡量選擇可補充包的清潔用品、洗髮精、沐浴乳，減少塑膠瓶浪費。
-    </div>
-  </div>
-</div>
-
-  <!-- 卡片6 -->
-<div class="flip-card">
-  <div class="flip-inner">
-    <div class="flip-front">
-      <img src="model/再利用.png">
-      <h3>物品再利用</h3>
-    </div>
-    <div class="flip-back">
-     紙袋、瓶罐、紙箱都可再利用，讓物品的壽命延長。
+      <img src="model/tip2.png">
     </div>
   </div>
 </div>
 
 </div>
 
-<button id="backHome" onclick="location.href='index.html'">返回首頁</button>
+<!-- 放大圖片 -->
+<div id="imgModal">
+  <img id="modalImg">
+</div>
+
+<!-- 按鈕 -->
+<button class="btn prev" onclick="history.back()">回上一頁</button>
+<button class="btn back" onclick="location.href='index.html'">回首頁</button>
 
 <script>
+
 // 翻牌
 document.querySelectorAll(".flip-card").forEach(card=>{
   card.addEventListener("click",()=>{
     card.querySelector(".flip-inner").classList.toggle("active");
   });
 });
+
+// 圖片放大
+const modal=document.getElementById("imgModal");
+const modalImg=document.getElementById("modalImg");
+
+document.querySelectorAll(".flip-back img").forEach(img=>{
+  img.addEventListener("click",(e)=>{
+    e.stopPropagation(); // 防止翻牌
+    modal.style.display="flex";
+    modalImg.src=img.src;
+  });
+});
+
+modal.addEventListener("click",()=>{
+  modal.style.display="none";
+});
+
 </script>
 
 </body>
