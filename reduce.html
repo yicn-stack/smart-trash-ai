@@ -38,7 +38,7 @@ body{
 /* 卡片 */
 .flip-card{
   width:270px;
-  height:350px;
+  height:360px;
   perspective:1000px;
 }
 
@@ -64,7 +64,7 @@ body{
   box-shadow:0 6px 15px rgba(0,0,0,.15);
 }
 
-/* 正面（文字） */
+/* 正面 */
 .flip-front{
   background:white;
   padding:15px;
@@ -84,21 +84,35 @@ body{
   font-size:0.9rem;
 }
 
-/* 背面（圖片） */
+/* 背面（⭐已優化排版） */
 .flip-back{
   background:white;
   transform:rotateY(180deg);
   display:flex;
+  flex-direction:column;
   align-items:center;
-  justify-content:center;
-  padding:10px;
+  justify-content:flex-start;
+  padding:12px;
+  text-align:center;
 }
 
+/* 圖片 */
 .flip-back img{
   width:100%;
   aspect-ratio:1/1;
   object-fit:contain;
   cursor:pointer;
+  margin-bottom:10px;
+  border-radius:10px;
+  background:#f5f5f5;
+  padding:8px;
+}
+
+/* 文字 */
+.back-text{
+  font-size:0.9rem;
+  color:#33691e;
+  line-height:1.4;
 }
 
 /* 圖片放大 */
@@ -120,13 +134,26 @@ body{
   border-radius:10px;
 }
 
+/* ⭐ 按鈕區（左右並排） */
+.btn-group{
+  display:flex;
+  gap:20px;
+  margin:25px 0;
+}
+
 /* 按鈕 */
 .btn{
-  margin:20px 10px;
-  padding:10px 25px;
+  padding:12px 30px;
   border-radius:25px;
   border:none;
   cursor:pointer;
+  font-size:1rem;
+  box-shadow:0 4px 10px rgba(0,0,0,.15);
+  transition:.3s;
+}
+
+.btn:hover{
+  transform:translateY(-3px);
 }
 
 .back{background:#66bb6a;color:white;}
@@ -137,14 +164,14 @@ body{
 
 <body>
 
-<div id="header">🌱 垃圾減量 Tips（點擊卡片）</div>
+<div id="header">🌱 垃圾減量 Tips</div>
 
 <div class="container">
 
+<!-- 卡片1 -->
 <div class="flip-card">
   <div class="flip-inner">
     
-    <!--卡片1 -->
     <div class="flip-front">
       <h3>自備餐具</h3>
       <p>點擊查看更多</p>
@@ -152,9 +179,8 @@ body{
 
     <div class="flip-back">
       <img src="model/餐具.png">
-
       <div class="back-text">
-        用餐時自備筷子、湯匙與餐盒，可大幅減少一次性餐具的使用
+        🌱 用餐時自備筷子、湯匙與餐盒，可大幅減少一次性餐具的使用
       </div>
     </div>
 
@@ -166,11 +192,16 @@ body{
   <div class="flip-inner">
     <div class="flip-front">
       <h3>自備飲料杯</h3>
-      <p>環保又省錢</p>
+      <p>點擊查看更多</p>
     </div>
+
     <div class="flip-back">
       <img src="model/tip2.png">
+      <div class="back-text">
+        🌱 自備環保杯不僅減少垃圾，多數店家還會提供折扣
+      </div>
     </div>
+
   </div>
 </div>
 
@@ -181,9 +212,11 @@ body{
   <img id="modalImg">
 </div>
 
-<!-- 按鈕 -->
-<button class="btn prev" onclick="history.back()">回上一頁</button>
-<button class="btn back" onclick="location.href='index.html'">回首頁</button>
+<!-- ⭐ 按鈕左右並排 -->
+<div class="btn-group">
+  <button class="btn prev" onclick="history.back()">回上一頁</button>
+  <button class="btn back" onclick="location.href='index.html'">回首頁</button>
+</div>
 
 <script>
 
@@ -200,7 +233,7 @@ const modalImg=document.getElementById("modalImg");
 
 document.querySelectorAll(".flip-back img").forEach(img=>{
   img.addEventListener("click",(e)=>{
-    e.stopPropagation(); // 防止翻牌
+    e.stopPropagation();
     modal.style.display="flex";
     modalImg.src=img.src;
   });
