@@ -63,7 +63,7 @@ body{
   overflow:hidden;
 }
 
-/* ⭐ 正面（圖片版） */
+/* ⭐ 正面（圖片＋置中文字） */
 .flip-front{
   position:relative;
 }
@@ -72,24 +72,35 @@ body{
   width:100%;
   height:100%;
   object-fit:cover;
-  filter:brightness(0.75);
 }
 
+/* ⭐ 黑色遮罩 */
+.flip-front::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:rgba(0,0,0,0.35);
+}
+
+/* ⭐ 文字完全置中 */
 .front-text{
   position:absolute;
-  bottom:20px;
-  width:100%;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
   text-align:center;
   color:white;
-  font-size:1.3rem;
+  font-size:1.4rem;
   font-weight:bold;
-  text-shadow:0 2px 8px rgba(0,0,0,0.6);
+  text-shadow:0 3px 10px rgba(0,0,0,0.7);
+  width:90%;
+  z-index:2;
 }
 
 .front-text span{
   display:block;
   font-size:0.9rem;
-  margin-top:6px;
+  margin-top:8px;
 }
 
 /* 背面 */
@@ -176,7 +187,7 @@ body{
   <div class="flip-inner">
     <div class="flip-front">
       <img src="model/塑.png">
-      
+      <div class="front-text">塑膠類<span>點擊查看</span></div>
     </div>
     <div class="flip-back">
       <div class="img-tip">🔍 點圖片可放大</div>
@@ -193,7 +204,7 @@ body{
   <div class="flip-inner">
     <div class="flip-front">
       <img src="model/紙.png">
-    
+      <div class="front-text">紙類<span>點擊查看</span></div>
     </div>
     <div class="flip-back">
       <div class="img-tip">🔍 點圖片可放大</div>
@@ -210,7 +221,7 @@ body{
   <div class="flip-inner">
     <div class="flip-front">
       <img src="model/金.png">
-      
+      <div class="front-text">金屬<span>點擊查看</span></div>
     </div>
     <div class="flip-back">
       <div class="img-tip">🔍 點圖片可放大</div>
@@ -226,8 +237,8 @@ body{
 <div class="flip-card">
   <div class="flip-inner">
     <div class="flip-front">
-      <img src="model/餐.png">
-      
+      <img src="model/盒.png">
+      <div class="front-text">紙餐具<span>點擊查看</span></div>
     </div>
     <div class="flip-back">
       <div class="img-tip">🔍 點圖片可放大</div>
@@ -244,7 +255,7 @@ body{
   <div class="flip-inner">
     <div class="flip-front">
       <img src="model/玻.png">
-      
+      <div class="front-text">玻璃<span>點擊查看</span></div>
     </div>
     <div class="flip-back">
       <div class="img-tip">🔍 點圖片可放大</div>
@@ -261,7 +272,7 @@ body{
   <div class="flip-inner">
     <div class="flip-front">
       <img src="model/害.png">
-      
+      <div class="front-text">有害垃圾<span>點擊查看</span></div>
     </div>
     <div class="flip-back">
       <div class="img-tip">🔍 點圖片可放大</div>
@@ -278,7 +289,7 @@ body{
   <div class="flip-inner">
     <div class="flip-front">
       <img src="model/一.png">
-      
+      <div class="front-text">一般垃圾<span>點擊查看</span></div>
     </div>
     <div class="flip-back">
       <div class="img-tip">🔍 點圖片可放大</div>
@@ -292,26 +303,22 @@ body{
 
 </div>
 
-<!-- 按鈕 -->
 <div class="btn-group">
   <button class="btn prev" onclick="history.back()">回上一頁</button>
   <button class="btn back" onclick="location.href='index.html'">回首頁</button>
 </div>
 
-<!-- 放大 -->
 <div id="imgModal">
   <img id="modalImg">
 </div>
 
 <script>
-// 翻牌
 document.querySelectorAll(".flip-card").forEach(card=>{
   card.addEventListener("click",()=>{
     card.querySelector(".flip-inner").classList.toggle("active");
   });
 });
 
-// 放大
 const modal=document.getElementById("imgModal");
 const modalImg=document.getElementById("modalImg");
 
