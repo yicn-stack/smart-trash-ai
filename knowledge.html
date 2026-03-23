@@ -3,8 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <title>分類小知識</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
+
+*{box-sizing:border-box;margin:0;padding:0;}
+
 body{
   font-family:"Noto Sans TC";
   background:#e8f5e9;
@@ -14,13 +18,70 @@ body{
   padding:30px;
 }
 
-.card{
-  background:white;
-  padding:20px;
-  border-radius:20px;
-  margin:10px;
-  width:320px;
+/* 標題 */
+h2{
+  margin-bottom:20px;
+  color:#2e7d32;
 }
+
+/* 卡片 */
+.card{
+  width:340px;
+  background:white;
+  border-radius:20px;
+  margin:15px 0;
+  overflow:hidden;
+  box-shadow:0 8px 20px rgba(0,0,0,.15);
+  cursor:pointer;
+  transition:.3s;
+}
+
+.card:hover{
+  transform:translateY(-6px) scale(1.02);
+}
+
+/* ⭐ 圖片（A2適用） */
+.card img{
+  width:100%;
+  aspect-ratio:3/4;   /* 接近A2比例 */
+  object-fit:contain; /* 完整顯示 */
+  background:#f5f5f5;
+  padding:10px;
+}
+
+/* 內容 */
+.card-content{
+  padding:15px;
+  text-align:center;
+}
+
+.card h3{
+  color:#2e7d32;
+  margin-bottom:8px;
+}
+
+.card p{
+  color:#555;
+  font-size:0.95rem;
+  line-height:1.5;
+}
+
+/* 回首頁 */
+.back-btn{
+  margin-top:25px;
+  background:#66bb6a;
+  padding:12px 30px;
+  border-radius:25px;
+  color:white;
+  text-decoration:none;
+  font-weight:bold;
+  box-shadow:0 5px 12px rgba(0,0,0,.2);
+}
+
+.back-btn:hover{
+  transform:translateY(-3px);
+}
+
 </style>
 </head>
 
@@ -28,18 +89,31 @@ body{
 
 <h2>📚 分類小知識</h2>
 
-<!-- 塑膠 -->
-<div class="card" onclick="location.href='knowledge1.html'" style="cursor:pointer;">
-  <h3>♻️分類小知識</h3>
-  <p>你知道在做垃圾分類時需要注意哪些小細節嗎?</p>
+<!-- 卡片1 -->
+<div class="card" onclick="location.href='knowledge1.html'">
+
+  <img src="model/知識.png" alt="分類小知識">
+
+  <div class="card-content">
+    <h3>♻️ 分類小知識</h3>
+    <p>你知道在做垃圾分類時需要注意哪些小細節嗎？</p>
+  </div>
+
 </div>
 
-<!-- 紙類 -->
-<div class="card" onclick="location.href='reduce.html'" style="cursor:pointer;">
-  <h3>♻️垃圾減料TIPS</h3>
-  <p>你知道生活中有哪些方式可以減少垃圾的產生嗎?</p>
+<!-- 卡片2 -->
+<div class="card" onclick="location.href='reduce.html'">
+
+  <img src="model/減量.png" alt="垃圾減量">
+
+  <div class="card-content">
+    <h3>🌱 垃圾減量 TIPS</h3>
+    <p>你知道生活中有哪些方式可以減少垃圾的產生嗎？</p>
+  </div>
+
 </div>
-<a href="index.html">⬅ 回首頁</a>
+
+<a href="index.html" class="back-btn">回首頁</a>
 
 </body>
 </html>
