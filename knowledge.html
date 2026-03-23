@@ -40,13 +40,13 @@ h2{
   transform:translateY(-6px) scale(1.02);
 }
 
-/* ⭐ 圖片（A2適用） */
+/* ⭐ 1:1 正方形圖片 */
 .card img{
   width:100%;
-  aspect-ratio:3/4;   /* 接近A2比例 */
-  object-fit:contain; /* 完整顯示 */
+  aspect-ratio:1/1;     /* ⭐ 關鍵：正方形 */
+  object-fit:contain;   /* ⭐ 完整顯示圖片 */
   background:#f5f5f5;
-  padding:10px;
+  padding:15px;
 }
 
 /* 內容 */
@@ -92,7 +92,7 @@ h2{
 <!-- 卡片1 -->
 <div class="card" onclick="location.href='knowledge1.html'">
 
-  <img src="model/知識.png" alt="分類小知識">
+  <img src="model/knowledge.png" alt="分類小知識">
 
   <div class="card-content">
     <h3>♻️ 分類小知識</h3>
@@ -104,7 +104,7 @@ h2{
 <!-- 卡片2 -->
 <div class="card" onclick="location.href='reduce.html'">
 
-  <img src="model/減量.png" alt="垃圾減量">
+  <img src="model/reduce.png" alt="垃圾減量">
 
   <div class="card-content">
     <h3>🌱 垃圾減量 TIPS</h3>
