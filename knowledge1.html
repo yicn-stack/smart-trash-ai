@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="zh-TW">
 <head>
 <meta charset="UTF-8">
@@ -26,12 +27,12 @@ body{
 /* 容器 */
 .container{
   max-width:1000px;
-  align-items:flex-start; /* ⭐ 防止高度變動影響排列 */
   margin:30px auto;
   display:flex;
   flex-wrap:wrap;
   justify-content:center;
   gap:20px;
+  align-items:flex-start; /* ⭐ 防止跳動 */
 }
 
 /* 卡片 */
@@ -39,11 +40,11 @@ body{
   width:320px;
   height:470px;
   perspective:1200px;
+  flex:0 0 auto;
+  transform:translateZ(0); /* ⭐ 減少抖動 */
 }
 
-.flip-inner,
-.flip-front,
-.flip-back{
+.flip-inner{
   width:100%;
   height:100%;
   position:relative;
@@ -56,8 +57,9 @@ body{
 }
 
 /* 正反面 */
-.flip-front,.flip-back{
-  position:absolute;
+.flip-front,
+.flip-back{
+  position:absolute; /* ⭐ 修正重點 */
   width:100%;
   height:100%;
   border-radius:20px;
@@ -66,17 +68,11 @@ body{
   overflow:hidden;
 }
 
-/* ⭐ 正面（圖片版） */
-.flip-front{
-  position:relative;
-}
-
+/* 正面 */
 .flip-front img{
   width:100%;
   height:100%;
   object-fit:cover;
-  filter:brightness(0.90);
-  
 }
 
 .front-text{
@@ -101,8 +97,8 @@ body{
   background:white;
   transform:rotateY(180deg);
   padding:15px;
-  overflow-y:auto;
   text-align:center;
+  overflow:hidden; /* ⭐ 防止高度變動 */
 }
 
 /* 圖片 */
@@ -167,6 +163,7 @@ body{
   border-radius:12px;
 }
 </style>
+
 </head>
 
 <body>
@@ -176,6 +173,7 @@ body{
 <div class="container">
 
 <!-- 塑膠 -->
+
 <div class="flip-card">
   <div class="flip-inner">
     <div class="flip-front">
@@ -193,6 +191,7 @@ body{
 </div>
 
 <!-- 紙類 -->
+
 <div class="flip-card">
   <div class="flip-inner">
     <div class="flip-front">
@@ -210,6 +209,7 @@ body{
 </div>
 
 <!-- 金屬 -->
+
 <div class="flip-card">
   <div class="flip-inner">
     <div class="flip-front">
@@ -227,6 +227,7 @@ body{
 </div>
 
 <!-- 紙餐具 -->
+
 <div class="flip-card">
   <div class="flip-inner">
     <div class="flip-front">
@@ -244,6 +245,7 @@ body{
 </div>
 
 <!-- 玻璃 -->
+
 <div class="flip-card">
   <div class="flip-inner">
     <div class="flip-front">
@@ -261,6 +263,7 @@ body{
 </div>
 
 <!-- 有害 -->
+
 <div class="flip-card">
   <div class="flip-inner">
     <div class="flip-front">
@@ -278,6 +281,7 @@ body{
 </div>
 
 <!-- 一般 -->
+
 <div class="flip-card">
   <div class="flip-inner">
     <div class="flip-front">
@@ -297,12 +301,14 @@ body{
 </div>
 
 <!-- 按鈕 -->
+
 <div class="btn-group">
   <button class="btn prev" onclick="history.back()">回上一頁</button>
   <button class="btn back" onclick="location.href='index.html'">回首頁</button>
 </div>
 
 <!-- 放大 -->
+
 <div id="imgModal">
   <img id="modalImg">
 </div>
@@ -315,18 +321,19 @@ document.querySelectorAll(".flip-card").forEach(card=>{
   });
 });
 
-// 放大
+// 放大圖片
 const modal=document.getElementById("imgModal");
 const modalImg=document.getElementById("modalImg");
 
 document.querySelectorAll(".flip-back img").forEach(img=>{
   img.addEventListener("click",(e)=>{
-    e.stopPropagation();
+    e.stopPropagation(); // ⭐ 防止觸發翻牌
     modal.style.display="flex";
     modalImg.src=img.src;
   });
 });
 
+// 關閉
 modal.addEventListener("click",()=>{
   modal.style.display="none";
 });
@@ -334,3 +341,4 @@ modal.addEventListener("click",()=>{
 
 </body>
 </html>
+
