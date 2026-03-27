@@ -26,40 +26,35 @@ body{
   font-size:1.5rem;
 }
 
-/* 容器 */
+/* 容器用 inline-block 排列 */
 .container{
   margin-top:20px;
-   align-items:flex-start;  /* ⭐關鍵 */
-  display:flex;
-  flex-wrap:wrap;
-  gap:20px;
-  justify-content:center;
+  text-align:center;
 }
 
-/* ⭐ 卡片固定 */
+/* 卡片 */
 .flip-card{
+  display:inline-block;
   width:270px;
   height:340px;
   perspective:1000px;
+  margin:10px;
+  vertical-align:top;
   position:relative;
-  flex:0 0 auto;   
-  display:block;
+  overflow:hidden;
 }
 
-/* ⭐ 內層完全固定 */
+/* 內層翻牌 */
 .flip-inner{
-  position:absolute;
+  position:relative;
   width:100%;
   height:100%;
-  top:0;
-  left:0;
-  transition:transform .6s;
-  transform-style:preserve-3d;
-  will-change: transform;
+  transition: transform .6s;
+  transform-style: preserve-3d;
 }
 
 .flip-inner.active{
-  transform:rotateY(180deg);
+  transform: rotateY(180deg);
 }
 
 /* 正反面 */
@@ -74,17 +69,12 @@ body{
 }
 
 /* 正面 */
-.flip-front{
-  position:relative;
-}
-
 .flip-front img{
   width:100%;
   height:100%;
   object-fit:cover;
 }
 
-/* 文字 */
 .front-text{
   position:absolute;
   top:50%;
@@ -95,16 +85,16 @@ body{
   text-align:center;
 }
 
-/* ⭐ 背面 */
+/* 背面 */
 .flip-back{
-  transform:rotateY(180deg);
+  transform: rotateY(180deg);
   background:white;
-  display:flex;
-  flex-direction:column;
-  height:100%;   /* ⭐ 一定要有 */
+  top:0;
+  left:0;
+  position:absolute;
 }
 
-/* ⭐ 圖片區（正方形1:1） */
+/* 背面圖片區 */
 .back-img{
   width:100%;
   position:relative;
@@ -113,7 +103,7 @@ body{
 .back-img::before{
   content:"";
   display:block;
-  padding-top:100%;   /* ⭐ 產生正方形，但不影響外層高度 */
+  padding-top:100%; /* 正方形 */
 }
 
 .back-img img{
@@ -126,13 +116,18 @@ body{
   cursor:pointer;
 }
 
-/* ⭐ 文字區 */
+/* 背面文字區改絕對定位，不影響高度 */
 .back-text{
-  flex:1;
+  position:absolute;
+  bottom:0;
+  left:0;
+  width:100%;
+  padding:8px;
   font-size:0.85rem;
   color:#33691e;
-  padding:8px;
   overflow:auto;
+  background: rgba(255,255,255,0.9);
+  box-sizing:border-box;
 }
 
 /* 放大圖片 */
@@ -146,6 +141,7 @@ body{
   display:none;
   justify-content:center;
   align-items:center;
+  z-index:1000;
 }
 
 #imgModal img{
@@ -172,7 +168,6 @@ body{
 
 .back{background:#66bb6a;color:white;}
 .prev{background:white;color:#2e7d32;border:2px solid #66bb6a;}
-
 </style>
 </head>
 
@@ -187,7 +182,7 @@ body{
   <div class="flip-inner">
     <div class="flip-front">
       <img src="model/11.png">
-      <div class="front-text">自備餐具<br>點擊查看</span></div>
+      <div class="front-text">自備餐具<br>點擊查看</div>
     </div>
     <div class="flip-back">
       <div class="back-img">
@@ -205,7 +200,7 @@ body{
   <div class="flip-inner">
     <div class="flip-front">
       <img src="model/22.png">
-      <div class="front-text">自備飲料杯<br>點擊查看</span></div>
+      <div class="front-text">自備飲料杯<br>點擊查看</div>
     </div>
     <div class="flip-back">
       <div class="back-img">
@@ -223,7 +218,7 @@ body{
   <div class="flip-inner">
     <div class="flip-front">
       <img src="model/33.png">
-      <div class="front-text">減少包裝<br>點擊查看</span></div>
+      <div class="front-text">減少包裝<br>點擊查看</div>
     </div>
     <div class="flip-back">
       <div class="back-img">
@@ -241,7 +236,7 @@ body{
   <div class="flip-inner">
     <div class="flip-front">
       <img src="model/44.png">
-      <div class="front-text">避免一次性<br>點擊查看</span></div>
+      <div class="front-text">避免一次性<br>點擊查看</div>
     </div>
     <div class="flip-back">
       <div class="back-img">
@@ -259,7 +254,7 @@ body{
   <div class="flip-inner">
     <div class="flip-front">
       <img src="model/55.png">
-      <div class="front-text">補充式商品<br>點擊查看</span></div>
+      <div class="front-text">補充式商品<br>點擊查看</div>
     </div>
     <div class="flip-back">
       <div class="back-img">
@@ -277,7 +272,7 @@ body{
   <div class="flip-inner">
     <div class="flip-front">
       <img src="model/66.png">
-      <div class="front-text">物品再利用<br>點擊查看</span></div>
+      <div class="front-text">物品再利用<br>點擊查看</div>
     </div>
     <div class="flip-back">
       <div class="back-img">
@@ -292,7 +287,7 @@ body{
 
 </div>
 
-<!-- 放大 -->
+<!-- 放大圖片 -->
 <div id="imgModal">
   <img id="modalImg">
 </div>
@@ -304,7 +299,6 @@ body{
 </div>
 
 <script>
-
 // 翻牌
 document.querySelectorAll(".flip-card").forEach(card=>{
   card.addEventListener("click",()=>{
@@ -312,7 +306,7 @@ document.querySelectorAll(".flip-card").forEach(card=>{
   });
 });
 
-// 放大
+// 放大圖片
 const modal=document.getElementById("imgModal");
 const modalImg=document.getElementById("modalImg");
 
@@ -327,7 +321,6 @@ document.querySelectorAll(".back-img img").forEach(img=>{
 modal.addEventListener("click",()=>{
   modal.style.display="none";
 });
-
 </script>
 
 </body>
