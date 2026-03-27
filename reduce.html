@@ -38,16 +38,16 @@ body{
 /* ⭐ 卡片固定 */
 .flip-card{
   width:270px;
-  height:320px; /* ⭐ 固定高度 */
+  height:320px;
   perspective:1000px;
   position:relative;
 }
 
-/* ⭐ 內層固定 */
+/* ⭐ 內層完全固定 */
 .flip-inner{
+  position:absolute;
   width:100%;
   height:100%;
-  position:absolute;
   top:0;
   left:0;
   transition:transform .6s;
@@ -65,8 +65,8 @@ body{
   height:100%;
   border-radius:16px;
   backface-visibility:hidden;
-  box-shadow:0 6px 15px rgba(0,0,0,.15);
   overflow:hidden;
+  box-shadow:0 6px 15px rgba(0,0,0,.15);
 }
 
 /* 正面 */
@@ -86,44 +86,40 @@ body{
   top:50%;
   left:50%;
   transform:translate(-50%,-50%);
-  text-align:center;
-  color:SeaGreen;
-  font-size:1.3rem;
+  color:seagreen;
   font-weight:bold;
+  text-align:center;
 }
 
-.front-text span{
-  display:block;
-  font-size:0.9rem;
-  margin-top:6px;
-}
-
-/* ⭐ 背面（完全固定） */
+/* ⭐ 背面 */
 .flip-back{
-  background:white;
   transform:rotateY(180deg);
+  background:white;
   display:flex;
   flex-direction:column;
-  padding:10px;
 }
 
-/* ⭐ 圖片（填滿！） */
-.flip-back img{
+/* ⭐ 圖片區（正方形1:1） */
+.back-img{
   width:100%;
-  height:65%;  /* ⭐ 圖片佔大部分 */
-  object-fit:cover; /* ⭐ 關鍵：填滿 */
-  cursor:pointer;
-  border-radius:10px;
+  aspect-ratio:1/1;   /* ⭐ 關鍵 */
+  overflow:hidden;
 }
 
-/* ⭐ 文字區固定 */
+.back-img img{
+  width:100%;
+  height:100%;
+  object-fit:cover;   /* ⭐ 填滿 */
+  cursor:pointer;
+}
+
+/* ⭐ 文字區 */
 .back-text{
-  height:35%;
+  flex:1;
   font-size:0.85rem;
   color:#33691e;
-  line-height:1.4;
+  padding:8px;
   overflow:auto;
-  padding-top:5px;
 }
 
 /* 放大圖片 */
@@ -181,7 +177,9 @@ body{
       <div class="front-text">自備餐具<span>點擊查看</span></div>
     </div>
     <div class="flip-back">
-      <img src="model/餐具.png">
+      <div class="back-img">
+        <img src="model/餐具.png">
+      </div>
       <div class="back-text">
         🌱 用餐時自備筷子、湯匙與吸管，可大幅減少一次性餐具的使用。
       </div>
@@ -197,7 +195,9 @@ body{
       <div class="front-text">自備飲料杯<span>點擊查看</span></div>
     </div>
     <div class="flip-back">
-      <img src="model/環保杯.png">
+      <div class="back-img">
+        <img src="model/環保杯.png">
+      </div>
       <div class="back-text">
         🌱 自備環保杯可享折扣，環保又省錢！
       </div>
@@ -213,7 +213,9 @@ body{
       <div class="front-text">減少包裝<span>點擊查看</span></div>
     </div>
     <div class="flip-back">
-      <img src="model/包裝.png">
+      <div class="back-img">
+        <img src="model/包裝.png">
+      </div>
       <div class="back-text">
         🌱 選擇簡單包裝或自備購物袋。
       </div>
@@ -229,7 +231,9 @@ body{
       <div class="front-text">避免一次性<span>點擊查看</span></div>
     </div>
     <div class="flip-back">
-      <img src="model/一次性.png">
+      <div class="back-img">
+        <img src="model/一次性.png">
+      </div>
       <div class="back-text">
         🌱 使用可重複餐盒，減少塑膠垃圾。
       </div>
@@ -245,7 +249,9 @@ body{
       <div class="front-text">補充式商品<span>點擊查看</span></div>
     </div>
     <div class="flip-back">
-      <img src="model/可補充.png">
+      <div class="back-img">
+        <img src="model/可補充.png">
+      </div>
       <div class="back-text">
         🌱 選擇補充包商品，減少塑膠瓶浪費。
       </div>
@@ -261,7 +267,9 @@ body{
       <div class="front-text">物品再利用<span>點擊查看</span></div>
     </div>
     <div class="flip-back">
-      <img src="model/再利用.png">
+      <div class="back-img">
+        <img src="model/再利用.png">
+      </div>
       <div class="back-text">
         🌱 紙袋、瓶罐可重複使用，延長物品壽命。
       </div>
@@ -295,7 +303,7 @@ document.querySelectorAll(".flip-card").forEach(card=>{
 const modal=document.getElementById("imgModal");
 const modalImg=document.getElementById("modalImg");
 
-document.querySelectorAll(".flip-back img").forEach(img=>{
+document.querySelectorAll(".back-img img").forEach(img=>{
   img.addEventListener("click",(e)=>{
     e.stopPropagation();
     modal.style.display="flex";
