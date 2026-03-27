@@ -42,8 +42,8 @@ body{
   height:340px;
   perspective:1000px;
   position:relative;
-  flex:0 0 auto;   /* ⭐防止被拉伸 */
-  display:block;⭐
+  flex:0 0 auto;   
+  display:block;
 }
 
 /* ⭐ 內層完全固定 */
@@ -55,7 +55,7 @@ body{
   left:0;
   transition:transform .6s;
   transform-style:preserve-3d;
-  will-change: transform;⭐
+  will-change: transform;
 }
 
 .flip-inner.active{
@@ -101,19 +101,28 @@ body{
   background:white;
   display:flex;
   flex-direction:column;
+  height:100%;   /* ⭐ 一定要有 */
 }
 
 /* ⭐ 圖片區（正方形1:1） */
 .back-img{
   width:100%;
-  aspect-ratio:1/1;   /* ⭐ 關鍵 */
-  overflow:hidden;
+  position:relative;
+}
+
+.back-img::before{
+  content:"";
+  display:block;
+  padding-top:100%;   /* ⭐ 產生正方形，但不影響外層高度 */
 }
 
 .back-img img{
+  position:absolute;
+  top:0;
+  left:0;
   width:100%;
   height:100%;
-  object-fit:cover;   /* ⭐ 填滿 */
+  object-fit:cover;
   cursor:pointer;
 }
 
