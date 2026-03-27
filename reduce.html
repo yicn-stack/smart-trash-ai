@@ -29,6 +29,7 @@ body{
 /* 容器 */
 .container{
   margin-top:20px;
+  align-items:flex-start; /* ⭐ 防止高度變動影響排列 */
   display:flex;
   flex-wrap:wrap;
   gap:20px;
@@ -38,7 +39,7 @@ body{
 /* ⭐ 卡片固定 */
 .flip-card{
   width:270px;
-  height:320px;
+  height:340px;
   perspective:1000px;
   position:relative;
 }
