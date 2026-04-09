@@ -1,1 +1,0 @@
-{"tfjsVersion":"1.7.4","tmVersion":"2.4.12","packageVersion":"0.8.4-alpha2","packageName":"@teachablemachine/image","timeStamp":"2026-04-02T02:46:13.760Z","userMetadata":{},"modelName":"tm-my-image-model","labels":["一般垃圾","有害垃圾","紙餐具","玻璃類","金屬類","紙類","塑膠類"],"imageSize":224}
