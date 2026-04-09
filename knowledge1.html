@@ -32,7 +32,7 @@ body{
   flex-wrap:wrap;
   justify-content:center;
   gap:20px;
-  align-items:flex-start; /* ⭐ 防止跳動 */
+  align-items:flex-start; 
 }
 
 /* 卡片 */
@@ -41,7 +41,7 @@ body{
   height:470px;
   perspective:1200px;
   flex:0 0 auto;
-  transform:translateZ(0); /* ⭐ 減少抖動 */
+  transform:translateZ(0); 
 }
 
 .flip-inner{
@@ -59,7 +59,7 @@ body{
 /* 正反面 */
 .flip-front,
 .flip-back{
-  position:absolute; /* ⭐ 修正重點 */
+  position:absolute; 
   width:100%;
   height:100%;
   border-radius:20px;
@@ -98,7 +98,7 @@ body{
   transform:rotateY(180deg);
   padding:15px;
   text-align:center;
-  overflow:hidden; /* ⭐ 防止高度變動 */
+  overflow:hidden; 
 }
 
 /* 圖片 */
@@ -327,7 +327,7 @@ const modalImg=document.getElementById("modalImg");
 
 document.querySelectorAll(".flip-back img").forEach(img=>{
   img.addEventListener("click",(e)=>{
-    e.stopPropagation(); // ⭐ 防止觸發翻牌
+    e.stopPropagation(); 
     modal.style.display="flex";
     modalImg.src=img.src;
   });
